@@ -5,7 +5,7 @@
 #include<stdlib.h>
 struct __istream;
 int closeis(struct __istream*);
-struct __istream*openis(FILE*f);
+struct __istream*openis(FILE*);
 struct __istream*openifs(const char*);
 char cpcio_getc_is(struct __istream*);
 char*cpcio_gtoken_is(struct __istream*);
