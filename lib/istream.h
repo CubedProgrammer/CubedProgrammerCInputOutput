@@ -2,7 +2,6 @@
 #ifndef Included_istream_h
 #define Included_istream_h
 #include<stdio.h>
-#include<stdlib.h>
 struct __istream;
 int closeis(struct __istream*);
 struct __istream*openis(FILE*);
