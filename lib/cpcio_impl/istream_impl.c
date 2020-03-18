@@ -100,4 +100,46 @@ char*cpcio_get_delim(struct __istream*__is)
 	strncpy(delim,__is->delim,__is->delimsz);
 	return delim;
 }
+int cpcio_gint_is(struct __istream*__is)
+{
+	char*__t=cpcio_gtoken_is(__is);
+	int i=atoi(__t);
+	free(__t);
+	return i;
+}
+long cpcio_glong_is(struct __istream*__is)
+{
+	char*__t=cpcio_gtoken_is(__is);
+	long l=strtol(__t,NULL,10);
+	free(__t);
+	return l;
+}
+long long cpcio_gll_is(struct __istream*__is)
+{
+	char*__t=cpcio_gtoken_is(__is);
+	long long ll=strtoll(__t,NULL,10);
+	free(__t);
+	return ll;
+}
+unsigned long long cpcio_gull_is(struct __istream*__is)
+{
+	char*__t=cpcio_gtoken_is(__is);
+	unsigned long long ull=strtoull(__t,NULL,10);
+	free(__t);
+	return ull;
+}
+float cpcio_gfloat_is(struct __istream*__is)
+{
+	char*__t=cpcio_gtoken_is(__is);
+	float f=strtof(__t,NULL);
+	free(__t);
+	return f;
+}
+double cpcio_gdouble_is(struct __istream*__is)
+{
+	char*__t=cpcio_gtoken_is(__is);
+	double d=strtod(__t,NULL);
+	free(__t);
+	return d;
+}
 #endif
