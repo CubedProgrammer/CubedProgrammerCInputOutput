@@ -1,6 +1,10 @@
 #ifndef __cplusplus
+#ifndef BUFSZ
 #define BUFSZ 16384
+#endif
+#ifndef MAX_DELIM_SIZE
 #define MAX_DELIM_SIZE 100
+#endif
 #include<stdbool.h>
 #include<stdio.h>
 #include<stdlib.h>
