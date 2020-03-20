@@ -124,7 +124,7 @@ void cpcio_plnull_os(struct __ostream*__os,unsigned long long ull)
 }
 void cpcio_plnf_os(struct __ostream*__os,float f)
 {
-	char*str=(char*)malloc(12*sizeof(char));
+	char*str=(char*)malloc(19*sizeof(char));
 	for(char*__it__=str;__it__!=str+12;++__it__)
 	{
 		*__it__=0;
@@ -135,7 +135,7 @@ void cpcio_plnf_os(struct __ostream*__os,float f)
 }
 void cpcio_plnd_os(struct __ostream*__os,double d)
 {
-	char*str=(char*)malloc(24*sizeof(char));
+	char*str=(char*)malloc(37*sizeof(char));
 	for(char*__it__=str;__it__!=str+12;++__it__)
 	{
 		*__it__=0;
