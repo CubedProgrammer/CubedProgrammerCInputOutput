@@ -19,8 +19,9 @@ void cpcio_flush_oss(struct __ostringstream*__oss)
 	{
 		__oss->o=(char*)realloc(__oss->o,__oss->ptr+__oss->bufs+3*BUFSZ);
 	}
-	strncpy(__oss->o,__oss->cbuf,__oss->bufs);
+	strncpy(__oss->o+__oss->ptr,__oss->cbuf,__oss->bufs);
 	__oss->ptr+=__oss->bufs;
+	__oss->bufs=0;
 }
 int closeoss(struct __ostringstream*__oss)
 {
@@ -32,6 +33,8 @@ struct __ostringstream*openoss(char*o)
 	struct __ostringstream*__oss=(struct __ostringstream*)malloc(sizeof(struct __ostringstream));
 	__oss->o=o;
 	__oss->bufs=0;
+	__oss->ptr=0;
+	__oss->len=strlen(o);
 	for(char*__it__=__oss->cbuf;__it__!=__oss->cbuf+BUFSZ;++__it__)
 	{
 		*__it__=0;
@@ -43,7 +46,6 @@ void cpcio_putc_oss(struct __ostringstream*__oss,const char c)
 	if(__oss->bufs==BUFSZ)
 	{
 		cpcio_flush_oss(__oss);
-		__oss->bufs=0;
 	}
 	__oss->cbuf[__oss->bufs]=c;
 	++__oss->bufs;

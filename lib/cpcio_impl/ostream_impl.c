@@ -15,6 +15,7 @@ void cpcio_flush_os(struct __ostream*__os)
 {
 	fputs(__os->cbuf,__os->f);
 	fflush(__os->f);
+	__os->bufs=0;
 }
 int closeos(struct __ostream*__os)
 {
@@ -44,7 +45,6 @@ void cpcio_putc_os(struct __ostream*__os,const char c)
 	if(__os->bufs==BUFSZ)
 	{
 		cpcio_flush_os(__os);
-		__os->bufs=0;
 	}
 	__os->cbuf[__os->bufs]=c;
 	++__os->bufs;
