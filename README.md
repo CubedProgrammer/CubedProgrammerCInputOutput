@@ -65,7 +65,7 @@ File: ostream.h
 ### Structures
 struct \_\_ostream
 
-ostreeam (aka struct \_\_ostream*)
+ostream (aka struct \_\_ostream*)
 ### Functions
 #### cpcio_flush_os(os)
 Param os is an ostream.
@@ -141,3 +141,75 @@ Param os is an ostream.
 Param d is a double.
 
 Prints a double to the ostream with a new line.
+
+## sstream
+File: sstream.h
+
+String streams header. There are input string streams and output string streams.
+### Structures
+struct \_\_istringstream
+
+\_\_istringstream (aka struct \_\_istringstream*)
+
+struct \_\_ostringstream
+
+\_\_ostringstream (aka struct \_\_ostringstream*)
+### Functions
+#### openiss(str)
+Param str is a string to read from.
+
+Opens an istringstream that reads from a string.
+#### openoss(str)
+Param str is a string to write to.
+
+Opens a ostringstream that writes to a string.
+
+All functions are the same as their istream and ostream counterparts.
+
+closeiss(iss)
+
+cpcio_getc_iss(iss)
+
+cpcio_gtoken_iss(iss)
+
+cpcio_udelim_iss(iss,str)
+
+cpcio_gdelim_iss(iss)
+
+cpcio_gint_iss(iss)
+
+cpcio_glong_iss(iss)
+
+cpcio_gll_iss(iss)
+
+cpcio_gull_iss(iss)
+
+cpcio_gfloat_iss(iss)
+
+cpcio_gdouble_iss(iss)
+
+cpcio_flush_oss(oss)
+
+closeoss(oss)
+
+cpcio_putc_oss(oss,c)
+
+cpcio_puts_oss(oss,str)
+
+cpcio_putln_oss(oss,str)
+
+cpcio_psqln_oss(oss,begin,end)
+
+cpcio_plnint_oss(oss,i)
+
+cpcio_plnl_oss(oss,l)
+
+cpcio_plnll_oss(oss,ll)
+
+cpcio_plnull_oss(oss,ull)
+
+cpcio_plnf_oss(oss,f)
+
+cpcio_plnd_oss(oss,d)
+
+cpcio_str_oss(oss)
