@@ -9,15 +9,19 @@ istream (aka struct \_\_istream*)
 ### Functions
 #### closeis(is)
 Param is is an istream.
+
 Closes an istream, returns zero on success.
-#### openis(f)
-Param f is a FILE pointer.
+#### openis(src,reader,close)
+Param src is a void pointer, data will be read from it in some way.
 
-Opens an istream that reads from the FILE pointer.
-#### openifs(s)
-Param s is the file name.
+Param reader is a pointer to a function, it will return the number of chars read and take in three parameters.
+The first parameter is a void pointer, which will be src.
+The second parameter is a char pointer, an array to store read chars in.
+The third parameter is a size type, the length of the array and the number of chars to try to read.
 
-Opens an istream that reads from a file.
+Param close is a pointer to a function, it must return zero on success, and take in a void pointer as a parameter, which will be src.
+
+Opens an istream.
 #### cpcio_getc_is(is)
 Param is is an istream.
 
@@ -75,18 +79,23 @@ Flushes the ostream.
 Param os is an ostream.
 
 Closes the stream, returns zero if successful.
-#### openos(f)
-Param f is a FILE pointer
+#### openos(src,writer,close)
+Param src is a void pointer, data will be written to it in some way.
 
-Opens an ostream that writes to the FILE pointer.
-#### openofs(s)
+Param writer is a pointer to a function, it will return the number of chars written and take in three parameters.
+The first parameter is a void pointer, which will be src.
+The second parameter is a char pointer, an array to write.
+The third parameter is a size type, the length of the array.
+
+Param close is a pointer to a function, it must return zero on success, and take in a void pointer as a parameter, which will be src.
+
+Opens an ostream.
+#### openofs(s,m)
 Param s is a filename.
+
+Param m is the mode, either w for write or a for append.
 
 Opens an ostream that writes to a file.
-#### openofsa(s)
-Param s is a filename.
-
-Opens an ostream that appends to a file.
 #### cpcio_putc_os(os,c)
 Param os is an ostream.
 
@@ -147,69 +156,32 @@ File: sstream.h
 
 String streams header. There are input string streams and output string streams.
 ### Structures
-struct \_\_istringstream
-
-\_\_istringstream (aka struct \_\_istringstream*)
-
-struct \_\_ostringstream
-
-\_\_ostringstream (aka struct \_\_ostringstream*)
+This header does offer new structs but they are not important for the user to know.
 ### Functions
 #### openiss(str)
 Param str is a string to read from.
 
 Opens an istringstream that reads from a string.
-#### openoss(str)
-Param str is a string to write to.
-
+#### openoss()
 Opens a ostringstream that writes to a string.
+#### cpcio_oss_str(ptr)
+Param ptr is a void pointer.
 
-All functions are the same as their istream and ostream counterparts.
+If you wanted to get the output string, suppose oss is your stream, you would do cpcio_oss_str((\*oss).src)
+## fstream
+File: fstream.h
 
-closeiss(iss)
+File streams header, for reading and writing to files.
+### Structures
+This header does not offer any structs.
+### Functions
+#### openifs(s)
+Param s is the file name.
 
-cpcio_getc_iss(iss)
+Opens an istream that reads from a file.
+#### openofs(s,m)
+Param s is a filename.
 
-cpcio_gtoken_iss(iss)
+Param m is the mode, either w for write or a for append.
 
-cpcio_udelim_iss(iss,str)
-
-cpcio_gdelim_iss(iss)
-
-cpcio_gint_iss(iss)
-
-cpcio_glong_iss(iss)
-
-cpcio_gll_iss(iss)
-
-cpcio_gull_iss(iss)
-
-cpcio_gfloat_iss(iss)
-
-cpcio_gdouble_iss(iss)
-
-cpcio_flush_oss(oss)
-
-closeoss(oss)
-
-cpcio_putc_oss(oss,c)
-
-cpcio_puts_oss(oss,str)
-
-cpcio_putln_oss(oss,str)
-
-cpcio_psqln_oss(oss,begin,end)
-
-cpcio_plnint_oss(oss,i)
-
-cpcio_plnl_oss(oss,l)
-
-cpcio_plnll_oss(oss,ll)
-
-cpcio_plnull_oss(oss,ull)
-
-cpcio_plnf_oss(oss,f)
-
-cpcio_plnd_oss(oss,d)
-
-cpcio_str_oss(oss)
+Opens an ostream that writes to a file.
