@@ -11,17 +11,19 @@
 #include<string.h>
 struct __istream
 {
+	void*src;
+	int(*rd)(void*,char*,size_t);
+	int(*close)(void*);
 	char cbuf[BUFSZ];
 	unsigned short bufs;
-	FILE*f;
 	char delim[MAX_DELIM_SIZE];
 	unsigned short delimsz;
 };
 int closeis(struct __istream*__is)
 {
-	return fclose(__is->f);
+	return __is->close(__is->src);
 }
-struct __istream*openis(FILE*__f)
+struct __istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)(void*))
 {
 	struct __istream*__is=(struct __istream*)malloc(sizeof(struct __istream));
 	for(char*__it__=__is->cbuf;__it__!=__is->cbuf+BUFSZ;++__it__)
@@ -33,14 +35,12 @@ struct __istream*openis(FILE*__f)
 		*__it__=0;
 	}
 	strcpy(__is->delim,"\n\t ");
-	__is->f=__f;
+	__is->src=__src;
+	__is->rd=__rdr;
+	__is->close=__close;
 	__is->bufs=BUFSZ;
 	__is->delimsz=3;
 	return __is;
-}
-struct __istream*openifs(const char*__fname)
-{
-	return openis(fopen(__fname,"r"));
 }
 char cpcio_getc_is(struct __istream*__is)
 {
@@ -52,7 +52,7 @@ char cpcio_getc_is(struct __istream*__is)
 	}
 	else
 	{
-		fgets(__is->cbuf,BUFSZ,__is->f);
+		__is->rd(__is->src,__is->cbuf,BUFSZ);
 		__is->bufs=1;
 		return*__is->cbuf;
 	}

@@ -6,9 +6,7 @@
 struct __ostream;
 void cpcio_flush_os(struct __ostream*);
 int closeos(struct __ostream*);
-struct __ostream*openos(FILE*);
-struct __ostream*openofs(const char*);
-struct __ostream*openofsa(const char*);
+struct __ostream*openos(void*,int(*)(void*,const char*,size_t),int(*)(void*));
 void cpcio_putc_os(struct __ostream*,const char);
 void cpcio_puts_os(struct __ostream*,const char*);
 void cpcio_putln_os(struct __ostream*,const char*);

@@ -9,36 +9,31 @@ struct __ostream
 {
 	char cbuf[BUFSZ];
 	unsigned short bufs;
-	FILE*f;
+	void*src;
+	int(*rt)(void*,const char*,size_t);
+	int(*close)(void*);
 };
 void cpcio_flush_os(struct __ostream*__os)
 {
-	fputs(__os->cbuf,__os->f);
-	fflush(__os->f);
+	__os->rt(__os->src,__os->cbuf,__os->bufs);
 	__os->bufs=0;
 }
 int closeos(struct __ostream*__os)
 {
-	return fclose(__os->f);
+	return __os->close(__os->src);
 }
-struct __ostream*openos(FILE*f)
+struct __ostream*openos(void*__src,int(*__rtr)(void*,const char*,size_t),int(*__close)(void*))
 {
 	struct __ostream*__os=(struct __ostream*)malloc(sizeof(struct __ostream));
-	__os->f=f;
+	__os->src=__src;
+	__os->rt=__rtr;
+	__os->close=__close;
 	__os->bufs=0;
 	for(char*__it__=__os->cbuf;__it__!=__os->cbuf+BUFSZ;++__it__)
 	{
 		*__it__=0;
 	}
 	return __os;
-}
-struct __ostream*openofs(const char*__fname)
-{
-	return openos(fopen(__fname,"w"));
-}
-struct __ostream*openofsa(const char*__fname)
-{
-	return openos(fopen(__fname,"a"));
 }
 void cpcio_putc_os(struct __ostream*__os,const char c)
 {
