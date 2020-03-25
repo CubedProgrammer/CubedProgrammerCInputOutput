@@ -1,7 +1,7 @@
 #ifndef __cplusplus
 #include<stdio.h>
 #include<string.h>
-#include<lib/fstream.h>
+#include<fstream.h>
 struct __istream*openifs(const char*__fname)
 {
 	return openis((void*)fopen(__fname,"r"),&__cpcio_read_ifs,&__cpcio_close_fs);
@@ -22,7 +22,7 @@ int __cpcio_read_ifs(void*__src,char*__arr,size_t __n)
 	char*__t=fgets(__arr,__n,(FILE*)__src);
 	return __t==NULL?0:1;
 }
-int __cpcio_write_ofs(void*__src,char*__arr,size_t __n)
+int __cpcio_write_ofs(void*__src,const char*__arr,size_t __n)
 {
 	return fwrite(__arr,sizeof(char),__n,(FILE*)__src);
 }

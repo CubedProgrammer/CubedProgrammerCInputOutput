@@ -1,7 +1,7 @@
 #ifndef __cplusplus
 #include<stdlib.h>
 #include<string.h>
-#include<lib/sstream.h>
+#include<sstream.h>
 #define __CPCIO_OSS_SIZE 25001
 struct __isssrc
 {
@@ -31,6 +31,10 @@ struct __ostream*openoss()
 	__dest->dest=(char*)malloc(__dest->tot*sizeof(char));
 	__dest->dest[__dest->ptr]=0;
 	return openos((void*)__dest,&__cpcio_write_oss,&__cpcio_close_oss);
+}
+char*cpcio_oss_str(void*__dest_v_p)
+{
+	return((struct __ossdest*)__dest_v_p)->dest;
 }
 int __cpcio_read_iss(void*__src_v_p,char*__arr,size_t __n)
 {
