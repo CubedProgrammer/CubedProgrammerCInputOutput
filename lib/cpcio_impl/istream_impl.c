@@ -14,6 +14,7 @@ struct __istream
 	void*src;
 	int(*rd)(void*,char*,size_t);
 	int(*close)(void*);
+	bool eof;
 	char cbuf[BUFSZ];
 	unsigned short bufs;
 	char delim[MAX_DELIM_SIZE];
@@ -38,13 +39,18 @@ struct __istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)
 	__is->src=__src;
 	__is->rd=__rdr;
 	__is->close=__close;
+	__is->eof=false;
 	__is->bufs=BUFSZ;
 	__is->delimsz=3;
 	return __is;
 }
 char cpcio_getc_is(struct __istream*__is)
 {
-	if(__is->bufs<BUFSZ)
+	if(__is->eof)
+	{
+		return 0xff;
+	}
+	else if(__is->bufs<BUFSZ)
 	{
 		char c=__is->cbuf[__is->bufs];
 		++__is->bufs;
@@ -52,9 +58,14 @@ char cpcio_getc_is(struct __istream*__is)
 	}
 	else
 	{
-		__is->rd(__is->src,__is->cbuf,BUFSZ);
+		int __c=__is->rd(__is->src,__is->cbuf,BUFSZ);
 		__is->bufs=1;
-		return*__is->cbuf;
+		if(__c==0)
+		{
+			__is->bufs=0;
+			__is->eof=true;
+		}
+		return __c==0?-1:*__is->cbuf;
 	}
 }
 char*cpcio_gtoken_is(struct __istream*__is)
@@ -66,7 +77,7 @@ char*cpcio_gtoken_is(struct __istream*__is)
 	size_t __ts=0;
 	for(size_t i=0;i<__is->delimsz;i++)
 	{
-		if(__is->delim[i]==__ch)
+		if(__ch==-1||__is->delim[i]==__ch)
 		{
 			delim=true;
 		}
@@ -83,7 +94,7 @@ char*cpcio_gtoken_is(struct __istream*__is)
 		delim=false;
 		for(size_t i=0;i<__is->delimsz;i++)
 		{
-			if(__is->delim[i]==__ch)
+			if(__ch==-1||__is->delim[i]==__ch)
 			{
 				delim=true;
 			}
