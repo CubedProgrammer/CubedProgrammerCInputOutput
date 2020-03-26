@@ -1,11 +1,20 @@
 # CubedProgrammerCInputOutput
 C Streams Library
+
+## Installation Instructions
+Download or clone the repository. Put it in a folder on your hard drive.
+
+Compiler flags.
+
+-I or /I, for gcc and msvc respectively, and then use path C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib
 ## istream
 File: istream.h
 ### Structures
 struct \_\_istream
 
 istream (aka struct \_\_istream*)
+
+eof flag for istream indicates if the eof has been reached, is->eof is true if eof has been reached.
 ### Functions
 #### closeis(is)
 Param is is an istream.
@@ -25,11 +34,11 @@ Opens an istream.
 #### cpcio_getc_is(is)
 Param is is an istream.
 
-Reads a single character from the stream.
+Reads a single character from the stream, or 0xff if eof has been reached.
 #### cpcio_gtoken_is(is)
 Param is is an istream.
 
-Reads a token from the stream.
+Reads a token from the stream, returns an empty string if eof has been reached.
 #### cpcio_use_delim(is,s)
 Param is is an istream.
 
