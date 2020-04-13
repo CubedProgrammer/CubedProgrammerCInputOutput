@@ -34,6 +34,7 @@ struct __ostream*openoss()
 }
 char*cpcio_oss_str(struct __ostream*__oss)
 {
+	cpcio_flush_os(__oss);
 	return((struct __ossdest*)cpcio_dest_os(__oss))->dest;
 }
 int __cpcio_read_iss(void*__src_v_p,char*__arr,size_t __n)
