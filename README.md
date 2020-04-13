@@ -173,10 +173,10 @@ Param str is a string to read from.
 Opens an istringstream that reads from a string.
 #### openoss()
 Opens a ostringstream that writes to a string.
-#### cpcio_oss_str(ptr)
-Param ptr is a void pointer.
+#### cpcio_oss_str(oss)
+Param oss is a pointer to an ostringstream.
 
-If you wanted to get the output string, suppose oss is your stream, you would do cpcio_oss_str((\*oss).src)
+Gets the string from the ostringstream.
 ## fstream
 File: fstream.h
 
