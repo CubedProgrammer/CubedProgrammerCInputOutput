@@ -32,9 +32,9 @@ struct __ostream*openoss()
 	__dest->dest[__dest->ptr]=0;
 	return openos((void*)__dest,&__cpcio_write_oss,&__cpcio_close_oss);
 }
-char*cpcio_oss_str(void*__dest_v_p)
+char*cpcio_oss_str(struct __ostream*__oss)
 {
-	return((struct __ossdest*)__dest_v_p)->dest;
+	return((struct __ossdest*)cpcio_dest_os(__oss))->dest;
 }
 int __cpcio_read_iss(void*__src_v_p,char*__arr,size_t __n)
 {

@@ -157,4 +157,8 @@ double cpcio_gdouble_is(struct __istream*__is)
 	free(__t);
 	return d;
 }
+void*cpcio_src_is(struct __istream*__is)
+{
+	return __is->src;
+}
 #endif

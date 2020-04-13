@@ -17,6 +17,7 @@ void cpcio_plnll_os(struct __ostream*,long long);
 void cpcio_plnull_os(struct __ostream*,unsigned long long);
 void cpcio_plnf_os(struct __ostream*,float);
 void cpcio_plnd_os(struct __ostream*,double);
+void*cpcio_dest_os(struct __ostream*);
 typedef struct __ostream*ostream;
 #endif
 #endif

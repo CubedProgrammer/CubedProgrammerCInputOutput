@@ -15,6 +15,7 @@ long long cpcio_gll_is(struct __istream*);
 unsigned long long cpcio_gull_is(struct __istream*);
 float cpcio_gfloat_is(struct __istream*);
 double cpcio_gdouble_is(struct __istream*);
+void*cpcio_src_is(struct __istream*);
 typedef struct __istream*istream;
 #endif
 #endif

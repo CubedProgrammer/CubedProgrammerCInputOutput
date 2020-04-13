@@ -139,4 +139,8 @@ void cpcio_plnd_os(struct __ostream*__os,double d)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+void*cpcio_dest_os(struct __ostream*__os)
+{
+	return __os->src;
+}
 #endif
