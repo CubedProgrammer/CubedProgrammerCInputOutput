@@ -5,6 +5,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+
+// ostream structure
+// src is written to
+// rt is the write function
+// src is passed in, as well as a char buffer
+// close is the close function that will be called on src
 struct __ostream
 {
 	char cbuf[BUFSZ];
@@ -13,15 +19,25 @@ struct __ostream
 	int(*rt)(void*,const char*,size_t);
 	int(*close)(void*);
 };
+
+// flushes the ostream by calling rt on the char buf
+// anything saved on the buffer is written out and cleared
 void cpcio_flush_os(struct __ostream*__os)
 {
 	__os->rt(__os->src,__os->cbuf,__os->bufs);
 	__os->bufs=0;
 }
+
+// closes the ostream
+// the close function is called on src
 int closeos(struct __ostream*__os)
 {
 	return __os->close(__os->src);
 }
+
+// opens an ostream
+// should only be used if implementing a new type of ostream
+// takes in the src pointer, rt, and close function pointers
 struct __ostream*openos(void*__src,int(*__rtr)(void*,const char*,size_t),int(*__close)(void*))
 {
 	struct __ostream*__os=(struct __ostream*)malloc(sizeof(struct __ostream));
@@ -35,6 +51,9 @@ struct __ostream*openos(void*__src,int(*__rtr)(void*,const char*,size_t),int(*__
 	}
 	return __os;
 }
+
+// puts a single character into the stream
+// is written onto the buffer until full
 void cpcio_putc_os(struct __ostream*__os,const char c)
 {
 	if(__os->bufs==BUFSZ)
@@ -44,6 +63,9 @@ void cpcio_putc_os(struct __ostream*__os,const char c)
 	__os->cbuf[__os->bufs]=c;
 	++__os->bufs;
 }
+
+// writes a string to the stream
+// the '\0' is not written
 void cpcio_puts_os(struct __ostream*__os,const char*str)
 {
 	size_t __l=strlen(str);
@@ -52,11 +74,17 @@ void cpcio_puts_os(struct __ostream*__os,const char*str)
 		cpcio_putc_os(__os,str[i]);
 	}
 }
+
+// writes as string followed by a line terminating char
+// equivalent to cpcio_puts_os followed by putting '\n'
 void cpcio_putln_os(struct __ostream*__os,const char*str)
 {
 	cpcio_puts_os(__os,str);
 	cpcio_putc_os(__os,'\n');
 }
+
+// puts a sequence of strings into the stream
+// puts a space between every string, and then a new line at the end
 void cpcio_psqln_os(struct __ostream*__os,char**begin,char**end)
 {
 	while(begin!=end)
@@ -73,6 +101,8 @@ void cpcio_psqln_os(struct __ostream*__os,char**begin,char**end)
 		}
 	}
 }
+
+// puts an int on a new line
 void cpcio_plnint_os(struct __ostream*__os,int i)
 {
 	char*str=(char*)malloc(12*sizeof(char));
@@ -84,6 +114,8 @@ void cpcio_plnint_os(struct __ostream*__os,int i)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+
+// puts a long on a new line
 void cpcio_plnl_os(struct __ostream*__os,long l)
 {
 	char*str=(char*)malloc(12*sizeof(char));
@@ -95,6 +127,8 @@ void cpcio_plnl_os(struct __ostream*__os,long l)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+
+// puts a long long on a new line
 void cpcio_plnll_os(struct __ostream*__os,long long ll)
 {
 	char*str=(char*)malloc(24*sizeof(char));
@@ -106,6 +140,8 @@ void cpcio_plnll_os(struct __ostream*__os,long long ll)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+
+// puts a long long unsigned int on a new line
 void cpcio_plnull_os(struct __ostream*__os,unsigned long long ull)
 {
 	char*str=(char*)malloc(24*sizeof(char));
@@ -117,6 +153,8 @@ void cpcio_plnull_os(struct __ostream*__os,unsigned long long ull)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+
+// puts a float on a new line
 void cpcio_plnf_os(struct __ostream*__os,float f)
 {
 	char*str=(char*)malloc(19*sizeof(char));
@@ -128,6 +166,8 @@ void cpcio_plnf_os(struct __ostream*__os,float f)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+
+// puts a double on a new line
 void cpcio_plnd_os(struct __ostream*__os,double d)
 {
 	char*str=(char*)malloc(37*sizeof(char));
@@ -139,6 +179,9 @@ void cpcio_plnd_os(struct __ostream*__os,double d)
 	cpcio_puts_os(__os,str);
 	free(str);
 }
+
+// gets the destination of the stream
+// should only be used if implementing a new type of ostream
 void*cpcio_dest_os(struct __ostream*__os)
 {
 	return __os->src;
