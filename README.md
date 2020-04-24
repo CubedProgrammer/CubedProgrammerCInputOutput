@@ -6,7 +6,7 @@ Download or clone the repository. Put it in a folder on your hard drive.
 
 Compiler flags.
 
--I or /I, for gcc and msvc respectively, and then use path C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib
+-I or /I, for gcc and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required
 ## istream
 File: istream.h
 ### Structures
@@ -123,7 +123,44 @@ Param os is an ostream.
 Params begin and end are iterators that point to strings.
 
 Prints the sequence to an ostream, each item is space separated, and a \\n is put at the end.
-#### cpcio_plni_os(os,i)
+#### cpcio_putint_os(os,i)
+Param os is an ostream.
+
+Param i is an int.
+
+Prints an int to the ostream.
+#### cpcio_putl_os(os,l)
+Param os is an ostream.
+
+Param l is a long.
+
+Prints a long to the ostream.
+#### cpcio_putll_os(os,ll)
+Param os is an ostream.
+
+Param ll is a long long.
+
+Prints a long long to the ostream.
+#### cpcio_plnull_os(os,ull)
+Param os is an ostream.
+
+Param ull is a unsigned long long.
+
+Prints an unsigned long long to the ostream.
+#### cpcio_putf_os(os,f)
+Param os is an ostream.
+
+Param f is a float.
+
+Prints a float to the ostream.
+#### cpcio_putd_os(os,d)
+Param os is an ostream.
+
+Param d is a double.
+
+Prints a double to the ostream.
+
+#### cpcio_plnint_os(os,i)
 Param os is an ostream.
 
 Param i is an int.
