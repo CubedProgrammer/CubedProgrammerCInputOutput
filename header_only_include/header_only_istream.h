@@ -26,6 +26,12 @@ float cpcio_gfloat_is(struct __istream*);
 double cpcio_gdouble_is(struct __istream*);
 void*cpcio_src_is(struct __istream*);
 typedef struct __istream*istream;
+
+// the istream structure
+// src is the thing that is read from
+// rd is for reading, the src is passed in
+// and it must read chars into the buffer
+// close function is called when the stream is closed
 struct __istream
 {
 	void*src;
@@ -37,10 +43,15 @@ struct __istream
 	char delim[MAX_DELIM_SIZE];
 	unsigned short delimsz;
 };
+
+// closes the istream
 int closeis(struct __istream*__is)
 {
 	return __is->close(__is->src);
 }
+
+// opens an istream given src
+// and pointers to required functions
 struct __istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)(void*))
 {
 	struct __istream*__is=(struct __istream*)malloc(sizeof(struct __istream));
@@ -61,6 +72,9 @@ struct __istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)
 	__is->delimsz=3;
 	return __is;
 }
+
+// gets one character
+// or 0xff is eof is reached
 char cpcio_getc_is(struct __istream*__is)
 {
 	if(__is->eof)
@@ -85,6 +99,9 @@ char cpcio_getc_is(struct __istream*__is)
 		return __c==0?-1:*__is->cbuf;
 	}
 }
+
+// reads a token based on delimiters
+// returns it as a heap allocated char array
 char*cpcio_gtoken_is(struct __istream*__is)
 {
 	char __ch=cpcio_getc_is(__is);
@@ -121,17 +138,28 @@ char*cpcio_gtoken_is(struct __istream*__is)
 	__t[__ts]=0;
 	return __t;
 }
+
+// change the delim used by the stream
+// if any char in the str is found, the token is returned
 void cpcio_use_delim(struct __istream*__is,const char*str)
 {
 	__is->delimsz=strlen(str);
 	strcpy(__is->delim,str);
 }
+
+// get the delimiter
+// the string returned is allocated with malloc
+// and is a copy of the delimiter
+// changing it won't affect anything
 char*cpcio_get_delim(struct __istream*__is)
 {
 	char*delim=(char*)malloc(__is->delimsz*sizeof(char));
 	strncpy(delim,__is->delim,__is->delimsz);
 	return delim;
 }
+
+// get an int
+// token based
 int cpcio_gint_is(struct __istream*__is)
 {
 	char*__t=cpcio_gtoken_is(__is);
@@ -139,6 +167,9 @@ int cpcio_gint_is(struct __istream*__is)
 	free(__t);
 	return i;
 }
+
+// gets a long
+// token based
 long cpcio_glong_is(struct __istream*__is)
 {
 	char*__t=cpcio_gtoken_is(__is);
@@ -146,6 +177,9 @@ long cpcio_glong_is(struct __istream*__is)
 	free(__t);
 	return l;
 }
+
+// gets a long long
+// token based
 long long cpcio_gll_is(struct __istream*__is)
 {
 	char*__t=cpcio_gtoken_is(__is);
@@ -153,6 +187,9 @@ long long cpcio_gll_is(struct __istream*__is)
 	free(__t);
 	return ll;
 }
+
+// gets an long long unsigned int
+// token based
 unsigned long long cpcio_gull_is(struct __istream*__is)
 {
 	char*__t=cpcio_gtoken_is(__is);
@@ -160,6 +197,9 @@ unsigned long long cpcio_gull_is(struct __istream*__is)
 	free(__t);
 	return ull;
 }
+
+// gets a float
+// token based
 float cpcio_gfloat_is(struct __istream*__is)
 {
 	char*__t=cpcio_gtoken_is(__is);
@@ -167,6 +207,9 @@ float cpcio_gfloat_is(struct __istream*__is)
 	free(__t);
 	return f;
 }
+
+// gets a double
+// token based
 double cpcio_gdouble_is(struct __istream*__is)
 {
 	char*__t=cpcio_gtoken_is(__is);
@@ -174,6 +217,9 @@ double cpcio_gdouble_is(struct __istream*__is)
 	free(__t);
 	return d;
 }
+
+// gets the source
+// should only be used if making an istream
 void*cpcio_src_is(struct __istream*__is)
 {
 	return __is->src;
