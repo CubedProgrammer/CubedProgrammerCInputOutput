@@ -57,11 +57,11 @@ struct __istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)
 	struct __istream*__is=(struct __istream*)malloc(sizeof(struct __istream));
 	for(char*__it__=__is->cbuf;__it__!=__is->cbuf+BUFSZ;++__it__)
 	{
-		*__it__=0;
+		*__it__=-1;
 	}
 	for(char*__it__=__is->delim;__it__!=__is->delim+MAX_DELIM_SIZE;++__it__)
 	{
-		*__it__=0;
+		*__it__=-1;
 	}
 	strcpy(__is->delim,"\n\t ");
 	__is->src=__src;

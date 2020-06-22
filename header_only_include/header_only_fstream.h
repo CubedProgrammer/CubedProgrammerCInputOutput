@@ -37,8 +37,8 @@ struct __ostream*openofs(const char*__fname,const char*__m)
 // given to istream's rd function pointer
 int __cpcio_read_ifs(void*__src,char*__arr,size_t __n)
 {
-	char*__t=fgets(__arr,__n,(FILE*)__src);
-	return __t==NULL?0:1;
+	size_t __t=fread(__arr,sizeof(char),__n,(FILE*)__src);
+	return __t==0?0:1;
 }
 
 // function for writing to ofstream dest
