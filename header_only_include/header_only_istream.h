@@ -11,21 +11,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-struct __istream;
-int closeis(struct __istream*);
-struct __istream*openis(void*,int(*)(void*,char*,size_t),int(*)(void*));
-char cpcio_getc_is(struct __istream*);
-char*cpcio_gtoken_is(struct __istream*);
-void cpcio_use_delim(struct __istream*,const char*);
-char*cpcio_get_delim(struct __istream*);
-int cpcio_gint_is(struct __istream*);
-long cpcio_glong_is(struct __istream*);
-long long cpcio_gll_is(struct __istream*);
-unsigned long long cpcio_gull_is(struct __istream*);
-float cpcio_gfloat_is(struct __istream*);
-double cpcio_gdouble_is(struct __istream*);
-void*cpcio_src_is(struct __istream*);
-typedef struct __istream*istream;
+#include<istream.h>
 
 // the istream structure
 // src is the thing that is read from
@@ -38,6 +24,7 @@ struct __istream
 	int(*rd)(void*,char*,size_t);
 	int(*close)(void*);
 	bool eof;
+	short last;
 	char cbuf[BUFSZ];
 	unsigned short bufs;
 	char delim[MAX_DELIM_SIZE];
@@ -87,8 +74,15 @@ char cpcio_getc_is(struct __istream*__is)
 		++__is->bufs;
 		return c;
 	}
+	else if(__is->last > 0xff)
+	{
+		char c = __is->last;
+		__is->last &= 0xff;
+		return c;
+	}
 	else
 	{
+		__is->last = __is->cbuf[BUFSZ - 1];
 		int __c=__is->rd(__is->src,__is->cbuf,BUFSZ);
 		__is->bufs=1;
 		if(__c==0)
@@ -98,6 +92,16 @@ char cpcio_getc_is(struct __istream*__is)
 		}
 		return __c==0?-1:*__is->cbuf;
 	}
+}
+
+// ungets a character
+// basically, the last character read is un-read
+void cpcio_ungetc_is(struct __istream *is)
+{
+	if(is->bufs == 0)
+		is->last += 1 << 8;
+	else
+		--is->bufs;
 }
 
 // reads a token based on delimiters

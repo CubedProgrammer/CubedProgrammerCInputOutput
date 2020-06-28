@@ -6,6 +6,7 @@ struct __istream;
 int closeis(struct __istream*);
 struct __istream*openis(void*,int(*)(void*,char*,size_t),int(*)(void*));
 char cpcio_getc_is(struct __istream*);
+void cpcio_ungetc_is(struct __istream*);
 char*cpcio_gtoken_is(struct __istream*);
 void cpcio_use_delim(struct __istream*,const char*);
 char*cpcio_get_delim(struct __istream*);
