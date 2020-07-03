@@ -57,6 +57,7 @@ struct __istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)
 	__is->eof=false;
 	__is->bufs=BUFSZ;
 	__is->delimsz=3;
+	__is->last=0;
 	return __is;
 }
 
@@ -82,7 +83,7 @@ char cpcio_getc_is(struct __istream*__is)
 	}
 	else
 	{
-		__is->last = __is->cbuf[BUFSZ - 1];
+		__is->last = __is->cbuf[BUFSZ - 1] == -1 ? 0 : __is->cbuf[BUFSZ - 1];
 		int __c=__is->rd(__is->src,__is->cbuf,BUFSZ);
 		__is->bufs=1;
 		if(__c==0)

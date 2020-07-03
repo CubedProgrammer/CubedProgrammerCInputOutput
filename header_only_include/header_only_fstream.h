@@ -5,6 +5,9 @@
 #include<string.h>
 #include<istream.h>
 #include<ostream.h>
+#ifndef BUFSZ
+#define BUFSZ 16384
+#endif
 struct __istream*openifs(const char*);
 struct __ostream*openofs(const char*,const char*);
 int __cpcio_read_ifs(void*,char*,size_t);
@@ -38,6 +41,8 @@ struct __ostream*openofs(const char*__fname,const char*__m)
 int __cpcio_read_ifs(void*__src,char*__arr,size_t __n)
 {
 	size_t __t=fread(__arr,sizeof(char),__n,(FILE*)__src);
+	if(__t<BUFSZ)
+		memset(__arr+__t,-1,BUFSZ-__t);
 	return __t==0?0:1;
 }
 
