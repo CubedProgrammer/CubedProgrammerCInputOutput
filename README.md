@@ -7,6 +7,16 @@ Download or clone the repository. Put it in a folder on your hard drive.
 Compiler flags.
 
 -I or /I, for gcc and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required
+
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/fstream_impl.c
+
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/istream_impl.c
+
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/ostream_impl.c
+
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/sstream_impl.c
+
+gcc -o libcpcio.so fstream_impl.o istream_impl.o ostream_impl.o sstream_impl.o
 ## istream
 File: istream.h
 ### Structures
