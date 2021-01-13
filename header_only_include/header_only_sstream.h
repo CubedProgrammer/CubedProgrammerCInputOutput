@@ -5,20 +5,20 @@
 #include<string.h>
 #include<istream.h>
 #include<ostream.h>
-#define __CPCIO_OSS_SIZE 25001
-struct __isssrc;
-struct __ossdest;
-struct __istream*openiss(const char*);
-struct __ostream*openoss(void);
-char*cpcio_oss_str(struct __ostream*);
-int __cpcio_read_iss(void*,char*,size_t);
-int __cpcio_write_oss(void*,const char*,size_t);
-int __cpcio_close_iss(void*);
-int __cpcio_close_oss(void*);
+#define CPCIO_OSS_SIZE 25001
+struct cpcio_iss_src;
+struct cpcio_oss_dest;
+struct cpcio____istream*openiss(const char*);
+struct cpcio____ostream*openoss(void);
+char*cpcio_oss_str(struct cpcio____ostream*);
+int cpcio_read_iss(void*,char*,size_t);
+int cpcio_write_oss(void*,const char*,size_t);
+int cpcio_close_iss(void*);
+int cpcio_close_oss(void*);
 
 // src for istringstream
 // contains string and pointers
-struct __isssrc
+struct cpcio_iss_src
 {
 	const char*src;
 	size_t ptr;
@@ -27,7 +27,7 @@ struct __isssrc
 
 // src for ostringstream
 // contains string and pointers
-struct __ossdest
+struct cpcio_oss_dest
 {
 	char*dest;
 	size_t ptr;
@@ -36,50 +36,50 @@ struct __ossdest
 
 // opens an istringstream that reads from a string
 // pass in a string and the istringstream will read from that
-struct __istream*openiss(const char*__s)
+struct cpcio____istream*openiss(const char*s)
 {
-	struct __isssrc*__src=(struct __isssrc*)malloc(sizeof(struct __isssrc));
-	__src->src=__s;
-	__src->ptr=0;
-	__src->tot=strlen(__s);
-	return openis((void*)__src,&__cpcio_read_iss,&__cpcio_close_iss);
+	struct cpcio_iss_src*src=(struct cpcio_iss_src*)malloc(sizeof(struct cpcio_iss_src));
+	src->src=s;
+	src->ptr=0;
+	src->tot=strlen(s);
+	return openis((void*)src,&cpcio_read_iss,&cpcio_close_iss);
 }
 
 // opens an ostringstream
 // allows you to write to a string
-struct __ostream*openoss(void)
+struct cpcio____ostream*openoss(void)
 {
-	struct __ossdest*__dest=(struct __ossdest*)malloc(sizeof(struct __ossdest));
-	__dest->ptr=0;
-	__dest->tot=__CPCIO_OSS_SIZE;
-	__dest->dest=(char*)malloc(__dest->tot*sizeof(char));
-	__dest->dest[__dest->ptr]=0;
-	return openos((void*)__dest,&__cpcio_write_oss,&__cpcio_close_oss);
+	struct cpcio_oss_dest*dest=(struct cpcio_oss_dest*)malloc(sizeof(struct cpcio_oss_dest));
+	dest->ptr=0;
+	dest->tot=CPCIO_OSS_SIZE;
+	dest->dest=(char*)malloc(dest->tot*sizeof(char));
+	dest->dest[dest->ptr]=0;
+	return openos((void*)dest,&cpcio_write_oss,&cpcio_close_oss);
 }
 
 // get the string of the ostringstream
 // will return the string that has been written to
-char*cpcio_oss_str(struct __ostream*__oss)
+char*cpcio_oss_str(struct cpcio____ostream*__oss)
 {
 	cpcio_flush_os(__oss);
-	return((struct __ossdest*)cpcio_dest_os(__oss))->dest;
+	return((struct cpcio_oss_dest*)cpcio_dest_os(__oss))->dest;
 }
 
 // read from istringstream
 // given to istream's rd function pointer
-int __cpcio_read_iss(void*__src_v_p,char*__arr,size_t __n)
+int cpcio_read_iss(void*src_v_p,char*arr,size_t n)
 {
-	struct __isssrc*__src=(struct __isssrc*)__src_v_p;
-	if(__src->ptr<__src->tot)
+	struct cpcio_iss_src*src=(struct cpcio_iss_src*)src_v_p;
+	if(src->ptr<src->tot)
 	{
-		size_t i=__src->ptr;
-		for(char*__it__=__arr;__it__!=__arr+__n&&i<__src->tot;i++)
+		size_t i=src->ptr;
+		for(char*__it__=arr;__it__!=arr+n&&i<src->tot;i++)
 		{
-			*__it__=__src->src[i];
+			*__it__=src->src[i];
 		}
 		size_t tmp=i;
-		i-=__src->ptr;
-		__src->ptr=tmp;
+		i-=src->ptr;
+		src->ptr=tmp;
 		return i;
 	}
 	else
@@ -90,33 +90,33 @@ int __cpcio_read_iss(void*__src_v_p,char*__arr,size_t __n)
 
 // write to ostringstream
 // given to ostream's rt function pointer
-int __cpcio_write_oss(void*__src_v_p,const char*__arr,size_t __n)
+int cpcio_write_oss(void*src_v_p,const char*arr,size_t n)
 {
-	struct __ossdest*__src=(struct __ossdest*)__src_v_p;
-	if(__src->ptr+__n>__src->tot)
+	struct cpcio_oss_dest*src=(struct cpcio_oss_dest*)src_v_p;
+	if(src->ptr+n>src->tot)
 	{
-		__src->dest=realloc(__src->dest,__n>__src->tot?__src->tot*3+__n:__src->tot+__n*3);
+		src->dest=realloc(src->dest,n>src->tot?src->tot*3+n:src->tot+n*3);
 	}
-	for(size_t i=0;i<__n;i++,++__src->ptr)
+	for(size_t i=0;i<n;i++,++src->ptr)
 	{
-		__src->dest[__src->ptr]=__arr[i];
+		src->dest[src->ptr]=arr[i];
 	}
-	__src->dest[__src->ptr]=0;
-	return __n;
+	src->dest[src->ptr]=0;
+	return n;
 }
 
 // close an istringstream
 // given to the close function pointer
 // doesn't really do anything
-int __cpcio_close_iss(void*__src)
+int cpcio_close_iss(void*src)
 {return 0;}
 
 // closes an ostringstream
 // given to the close function pointer
-int __cpcio_close_oss(void*__src_v_p)
+int cpcio_close_oss(void*src_v_p)
 {
-	struct __ossdest*__src=(struct __ossdest*)__src_v_p;
-	free(__src->dest);
+	struct cpcio_oss_dest*src=(struct cpcio_oss_dest*)src_v_p;
+	free(src->dest);
 	return 0;
 }
 #endif

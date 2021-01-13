@@ -5,30 +5,30 @@
 #include<string.h>
 #include<istream.h>
 #include<ostream.h>
-#ifndef BUFSZ
-#define BUFSZ 16384
+#ifndef CPCIO____BUFSZ
+#define CPCIO____BUFSZ 16384
 #endif
-struct __istream*openifs(const char*);
-struct __ostream*openofs(const char*,const char*);
-int __cpcio_read_ifs(void*,char*,size_t);
-int __cpcio_write_ofs(void*,const char*,size_t);
-int __cpcio_close_fs(void*);
+struct cpcio____istream*cpcio_open_ifstream(const char*);
+struct cpcio____ostream*cpcio_open_ofstream(const char*,const char*);
+int cpcio_read_ifs(void*,char*,size_t);
+int cpcio_write_ofs(void*,const char*,size_t);
+int cpcio_close_fs(void*);
 
 // opens an ifstream to read a file
 // pass in the name of the file
-struct __istream*openifs(const char*__fname)
+struct cpcio____istream*cpcio_open_ifstream(const char*fname)
 {
-	return openis((void*)fopen(__fname,"r"),&__cpcio_read_ifs,&__cpcio_close_fs);
+	return openis((void*)fopen(fname,"r"),&cpcio_read_ifs,&cpcio_close_fs);
 }
 
 // opens an ofstream to write to a file
 // pass in the file name and the mode
 // mode can be w or a, returns NULL on invalid mode
-struct __ostream*openofs(const char*__fname,const char*__m)
+struct cpcio____ostream*cpcio_open_ofstream(const char*fname,const char*m)
 {
-	if(strcmp(__m,"w")==0||strcmp(__m,"a")==0)
+	if(strcmp(m,"w")==0||strcmp(m,"a")==0)
 	{
-		return openos((void*)fopen(__fname,__m),&__cpcio_write_ofs,&__cpcio_close_fs);
+		return openos((void*)fopen(fname,m),&cpcio_write_ofs,&cpcio_close_fs);
 	}
 	else
 	{
@@ -38,26 +38,26 @@ struct __ostream*openofs(const char*__fname,const char*__m)
 
 // function for reading from ifstream src
 // given to istream's rd function pointer
-int __cpcio_read_ifs(void*__src,char*__arr,size_t __n)
+int cpcio_read_ifs(void*src,char*arr,size_t n)
 {
-	size_t __t=fread(__arr,sizeof(char),__n,(FILE*)__src);
-	if(__t<BUFSZ)
-		memset(__arr+__t,-1,BUFSZ-__t);
-	return __t==0?0:1;
+	size_t t=fread(arr,sizeof(char),n,(FILE*)src);
+	if(t<CPCIO____BUFSZ)
+		memset(arr+t,-1,CPCIO____BUFSZ-t);
+	return t==0?0:1;
 }
 
 // function for writing to ofstream dest
 // given to ostream's rt function pointer
-int __cpcio_write_ofs(void*__src,const char*__arr,size_t __n)
+int cpcio_write_ofs(void*src,const char*arr,size_t n)
 {
-	return fwrite(__arr,sizeof(char),__n,(FILE*)__src);
+	return fwrite(arr,sizeof(char),n,(FILE*)src);
 }
 
 // function for closing both streams
 // used for both ifstream and ofstream
-int __cpcio_close_fs(void*__src)
+int cpcio_close_fs(void*src)
 {
-	return fclose((FILE*)__src);
+	return fclose((FILE*)src);
 }
 #endif
 #endif
