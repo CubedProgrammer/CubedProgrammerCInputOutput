@@ -20,9 +20,9 @@ gcc -o libcpcio.so fstream_impl.o istream_impl.o ostream_impl.o sstream_impl.o
 ## istream
 File: istream.h
 ### Structures
-struct \_\_istream
+struct cpcio\_\_\_\_istream
 
-istream (aka struct \_\_istream*)
+istream (aka struct cpcio\_\_\_\_istream*)
 
 eof flag for istream indicates if the eof has been reached, is->eof is true if eof has been reached.
 ### Functions
@@ -86,9 +86,9 @@ Reads a double from the stream
 ## ostream
 File: ostream.h
 ### Structures
-struct \_\_ostream
+struct cpcio\_\_\_\_ostream
 
-ostream (aka struct \_\_ostream*)
+ostream (aka struct cpcio\_\_\_\_ostream*)
 ### Functions
 #### cpcio_flush_os(os)
 Param os is an ostream.
@@ -231,11 +231,11 @@ File streams header, for reading and writing to files.
 ### Structures
 This header does not offer any structs.
 ### Functions
-#### openifs(s)
+#### cpcio_open_ifstream(s)
 Param s is the file name.
 
 Opens an istream that reads from a file.
-#### openofs(s,m)
+#### cpcio_open_ofstream(s,m)
 Param s is a filename.
 
 Param m is the mode, either w for write or a for append.
