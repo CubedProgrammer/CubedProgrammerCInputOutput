@@ -32,14 +32,14 @@ struct cpcio____istream
 };
 
 // closes the istream
-int closeis(struct cpcio____istream*__is)
+int cpcio_close_istream(struct cpcio____istream*__is)
 {
 	return __is->close(__is->src);
 }
 
 // opens an istream given src
 // and pointers to required functions
-struct cpcio____istream*openis(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)(void*))
+struct cpcio____istream*cpcio_open_istream(void*__src,int(*__rdr)(void*,char*,size_t),int(*__close)(void*))
 {
 	struct cpcio____istream*__is=(struct cpcio____istream*)malloc(sizeof(struct cpcio____istream));
 	for(char*__it__=__is->cbuf;__it__!=__is->cbuf+CPCIO____BUFSZ;++__it__)

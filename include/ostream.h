@@ -5,8 +5,8 @@
 #include<stdlib.h>
 struct cpcio____ostream;
 void cpcio_flush_os(struct cpcio____ostream*);
-int closeos(struct cpcio____ostream*);
-struct cpcio____ostream*openos(void*,int(*)(void*,const char*,size_t),int(*)(void*));
+int cpcio_close_ostream(struct cpcio____ostream*);
+struct cpcio____ostream*cpcio_open_ostream(void*,int(*)(void*,const char*,size_t),int(*)(void*));
 void cpcio_putc_os(struct cpcio____ostream*,const char);
 void cpcio_puts_os(struct cpcio____ostream*,const char*);
 void cpcio_putln_os(struct cpcio____ostream*,const char*);

@@ -8,15 +8,15 @@ Compiler flags.
 
 -I or /I, for gcc and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/fstream_impl.c
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/fstream_impl.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/istream_impl.c
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/istream_impl.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/ostream_impl.c
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/ostream_impl.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/sstream_impl.c
+gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/sstream_impl.c -fPIC
 
-gcc -o libcpcio.so fstream_impl.o istream_impl.o ostream_impl.o sstream_impl.o
+gcc -shared -o libcpcio.so fstream_impl.o istream_impl.o ostream_impl.o sstream_impl.o
 ## istream
 File: istream.h
 ### Structures
@@ -26,11 +26,11 @@ istream (aka struct cpcio\_\_\_\_istream*)
 
 eof flag for istream indicates if the eof has been reached, is->eof is true if eof has been reached.
 ### Functions
-#### closeis(is)
+#### cpcio_close_istream(is)
 Param is is an istream.
 
 Closes an istream, returns zero on success.
-#### openis(src,reader,close)
+#### cpcio_open_istream(src,reader,close)
 Param src is a void pointer, data will be read from it in some way.
 
 Param reader is a pointer to a function, it will return the number of chars read and take in three parameters.
@@ -94,11 +94,11 @@ ostream (aka struct cpcio\_\_\_\_ostream*)
 Param os is an ostream.
 
 Flushes the ostream.
-#### closeos(os)
+#### cpcio_close_ostream(os)
 Param os is an ostream.
 
 Closes the stream, returns zero if successful.
-#### openos(src,writer,close)
+#### cpcio_open_ostream(src,writer,close)
 Param src is a void pointer, data will be written to it in some way.
 
 Param writer is a pointer to a function, it will return the number of chars written and take in three parameters.
@@ -214,11 +214,11 @@ String streams header. There are input string streams and output string streams.
 ### Structures
 This header does offer new structs but they are not important for the user to know.
 ### Functions
-#### openiss(str)
+#### cpcio_open_isstream(str)
 Param str is a string to read from.
 
 Opens an istringstream that reads from a string.
-#### openoss()
+#### cpcio_open_osstream()
 Opens a ostringstream that writes to a string.
 #### cpcio_oss_str(oss)
 Param oss is a pointer to an ostringstream.

@@ -3,8 +3,8 @@
 #define Included_istream_h
 #include<stdio.h>
 struct cpcio____istream;
-int closeis(struct cpcio____istream*);
-struct cpcio____istream*openis(void*,int(*)(void*,char*,size_t),int(*)(void*));
+int cpcio_close_istream(struct cpcio____istream*);
+struct cpcio____istream*cpcio_open_istream(void*,int(*)(void*,char*,size_t),int(*)(void*));
 char cpcio_getc_is(struct cpcio____istream*);
 void cpcio_ungetc_is(struct cpcio____istream*);
 char*cpcio_gtoken_is(struct cpcio____istream*);

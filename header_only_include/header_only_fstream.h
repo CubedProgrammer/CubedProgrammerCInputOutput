@@ -18,7 +18,7 @@ int cpcio_close_fs(void*);
 // pass in the name of the file
 struct cpcio____istream*cpcio_open_ifstream(const char*fname)
 {
-	return openis((void*)fopen(fname,"r"),&cpcio_read_ifs,&cpcio_close_fs);
+	return cpcio_open_istream((void*)fopen(fname,"r"),&cpcio_read_ifs,&cpcio_close_fs);
 }
 
 // opens an ofstream to write to a file
@@ -28,7 +28,7 @@ struct cpcio____ostream*cpcio_open_ofstream(const char*fname,const char*m)
 {
 	if(strcmp(m,"w")==0||strcmp(m,"a")==0)
 	{
-		return openos((void*)fopen(fname,m),&cpcio_write_ofs,&cpcio_close_fs);
+		return cpcio_open_ostream((void*)fopen(fname,m),&cpcio_write_ofs,&cpcio_close_fs);
 	}
 	else
 	{

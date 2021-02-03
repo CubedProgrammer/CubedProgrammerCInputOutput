@@ -9,8 +9,8 @@
 #include<string.h>
 struct cpcio____ostream;
 void cpcio_flush_os(struct cpcio____ostream*);
-int closeos(struct cpcio____ostream*);
-struct cpcio____ostream*openos(void*,int(*)(void*,const char*,size_t),int(*)(void*));
+int cpcio_close_ostream(struct cpcio____ostream*);
+struct cpcio____ostream*cpcio_open_ostream(void*,int(*)(void*,const char*,size_t),int(*)(void*));
 void cpcio_putc_os(struct cpcio____ostream*,const char);
 void cpcio_puts_os(struct cpcio____ostream*,const char*);
 void cpcio_putln_os(struct cpcio____ostream*,const char*);
@@ -54,7 +54,7 @@ void cpcio_flush_os(struct cpcio____ostream*__os)
 
 // closes the ostream
 // the close function is called on src
-int closeos(struct cpcio____ostream*__os)
+int cpcio_close_ostream(struct cpcio____ostream*__os)
 {
 	return __os->close(__os->src);
 }
@@ -62,7 +62,7 @@ int closeos(struct cpcio____ostream*__os)
 // opens an ostream
 // should only be used if implementing a new type of ostream
 // takes in the src pointer, rt, and close function pointers
-struct cpcio____ostream*openos(void*__src,int(*__rtr)(void*,const char*,size_t),int(*__close)(void*))
+struct cpcio____ostream*cpcio_open_ostream(void*__src,int(*__rtr)(void*,const char*,size_t),int(*__close)(void*))
 {
 	struct cpcio____ostream*__os=(struct cpcio____ostream*)malloc(sizeof(struct cpcio____ostream));
 	__os->src=__src;
@@ -147,7 +147,7 @@ void cpcio_putl_os(struct cpcio____ostream*__os,long l)
 	{
 		*__it__=0;
 	}
-	sprintf(str,"%lli",l);
+	sprintf(str,"%li",l);
 	cpcio_puts_os(__os,str);
 	free(str);
 }
@@ -225,7 +225,7 @@ void cpcio_plnl_os(struct cpcio____ostream*__os,long l)
 	{
 		*__it__=0;
 	}
-	sprintf(str,"%lli\n",l);
+	sprintf(str,"%li\n",l);
 	cpcio_puts_os(__os,str);
 	free(str);
 }
