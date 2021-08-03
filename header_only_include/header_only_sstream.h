@@ -59,10 +59,10 @@ struct cpcio____ostream*cpcio_open_osstream(void)
 
 // get the string of the ostringstream
 // will return the string that has been written to
-char*cpcio_oss_str(struct cpcio____ostream*__oss)
+char*cpcio_oss_str(struct cpcio____ostream*oss)
 {
-	cpcio_flush_os(__oss);
-	return((struct cpcio_oss_dest*)cpcio_dest_os(__oss))->dest;
+	cpcio_flush_os(oss);
+	return((struct cpcio_oss_dest*)cpcio_dest_os(oss))->dest;
 }
 
 // read from istringstream

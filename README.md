@@ -8,13 +8,13 @@ Compiler flags.
 
 -I or /I, for gcc and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/fstream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/fstream_impl.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/istream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/istream_impl.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/ostream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/ostream_impl.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c include/cpcio_impl/sstream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/sstream_impl.c -fPIC
 
 gcc -shared -o libcpcio.so fstream_impl.o istream_impl.o ostream_impl.o sstream_impl.o
 ## istream
