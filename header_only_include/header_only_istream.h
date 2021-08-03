@@ -61,6 +61,13 @@ struct cpcio____istream*cpcio_open_istream(void*__src,int(*__rdr)(void*,char*,si
 	return __is;
 }
 
+// reads a block of data
+// returns the number of bytes read
+size_t cpcio_rd(struct cpcio____istream*is,void*buf,size_t sz)
+{
+	return is->rd(is->src,buf,sz);
+}
+
 // gets one character
 // or 0xff is eof is reached
 char cpcio_getc_is(struct cpcio____istream*__is)

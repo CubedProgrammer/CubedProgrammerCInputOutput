@@ -43,7 +43,7 @@ int cpcio_read_ifs(void*src,char*arr,size_t n)
 	size_t t=fread(arr,sizeof(char),n,(FILE*)src);
 	if(t<CPCIO____BUFSZ)
 		memset(arr+t,-1,CPCIO____BUFSZ-t);
-	return t==0?0:1;
+	return t;
 }
 
 // function for writing to ofstream dest

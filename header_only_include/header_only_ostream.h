@@ -11,6 +11,7 @@ struct cpcio____ostream;
 void cpcio_flush_os(struct cpcio____ostream*);
 int cpcio_close_ostream(struct cpcio____ostream*);
 struct cpcio____ostream*cpcio_open_ostream(void*,int(*)(void*,const char*,size_t),int(*)(void*));
+size_t cpcio_wr(struct cpcio____ostream*,const void*,size_t);
 void cpcio_putc_os(struct cpcio____ostream*,const char);
 void cpcio_puts_os(struct cpcio____ostream*,const char*);
 void cpcio_putln_os(struct cpcio____ostream*,const char*);
@@ -74,6 +75,13 @@ struct cpcio____ostream*cpcio_open_ostream(void*__src,int(*__rtr)(void*,const ch
 		*__it__=0;
 	}
 	return __os;
+}
+
+// writes a block of data
+// returns number of bytes written
+size_t cpcio_wr(struct cpcio____ostream*os,const void*buf,size_t sz)
+{
+	return os->rt(os->src,buf,sz);
 }
 
 // puts a single character into the stream
