@@ -1,10 +1,10 @@
 #ifndef __cplusplus
-#ifndef Included_header_only_sstream_h
-#define Included_header_only_sstream_h
+#ifndef Included_header_only_cpcio_sstream_h
+#define Included_header_only_cpcio_sstream_h
 #include<stdlib.h>
 #include<string.h>
-#include<istream.h>
-#include<ostream.h>
+#include<cpcio_istream.h>
+#include<cpcio_ostream.h>
 #define CPCIO_OSS_SIZE 25001
 struct cpcio_iss_src;
 struct cpcio_oss_dest;

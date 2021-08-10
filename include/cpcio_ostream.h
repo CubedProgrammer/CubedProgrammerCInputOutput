@@ -1,6 +1,6 @@
 #ifndef __cplusplus
-#ifndef Included_ostream_h
-#define Included_ostream_h
+#ifndef Included_cpcio_ostream_h
+#define Included_cpcio_ostream_h
 #include<stdio.h>
 #include<stdlib.h>
 struct cpcio____ostream;
@@ -26,5 +26,6 @@ void cpcio_plnf_os(struct cpcio____ostream*,float);
 void cpcio_plnd_os(struct cpcio____ostream*,double);
 void*cpcio_dest_os(struct cpcio____ostream*);
 typedef struct cpcio____ostream*ostream;
+typedef struct cpcio____ostream*cpcio_ostream;
 #endif
 #endif

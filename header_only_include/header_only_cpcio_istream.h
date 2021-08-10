@@ -1,17 +1,17 @@
 #ifndef __cplusplus
-#ifndef Included_header_only_istream_h
-#define Included_header_only_istream_h
+#ifndef Included_header_only_cpcio_istream_h
+#define Included_header_only_cpcio_istream_h
 #ifndef CPCIO____BUFSZ
 #define CPCIO____BUFSZ 16384
 #endif
-#ifndef MAX_DELIM_SIZE
-#define MAX_DELIM_SIZE 100
+#ifndef CPCIO____MAX_DELIM_SIZE
+#define CPCIO____MAX_DELIM_SIZE 100
 #endif
 #include<stdbool.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<istream.h>
+#include<cpcio_istream.h>
 
 // the istream structure
 // src is the thing that is read from
@@ -27,7 +27,7 @@ struct cpcio____istream
 	short last;
 	char cbuf[CPCIO____BUFSZ];
 	unsigned short bufs;
-	char delim[MAX_DELIM_SIZE];
+	char delim[CPCIO____MAX_DELIM_SIZE];
 	unsigned short delimsz;
 };
 
@@ -46,7 +46,7 @@ struct cpcio____istream*cpcio_open_istream(void*src,int(*rdr)(void*,char*,size_t
 	{
 		*__it__=-1;
 	}
-	for(char*__it__=is->delim;__it__!=is->delim+MAX_DELIM_SIZE;++__it__)
+	for(char*__it__=is->delim;__it__!=is->delim+CPCIO____MAX_DELIM_SIZE;++__it__)
 	{
 		*__it__=-1;
 	}
@@ -70,11 +70,11 @@ size_t cpcio_rd(struct cpcio____istream*is,void*buf,size_t sz)
 
 // gets one character
 // or 0xff is eof is reached
-char cpcio_getc_is(struct cpcio____istream*is)
+int cpcio_getc_is(struct cpcio____istream*is)
 {
 	if(is->eof)
 	{
-		return 0xff;
+		return-1;
 	}
 	else if(is->bufs<CPCIO____BUFSZ)
 	{

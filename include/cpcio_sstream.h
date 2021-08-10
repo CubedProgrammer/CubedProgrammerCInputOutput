@@ -1,8 +1,8 @@
 #ifndef __cplusplus
-#ifndef Included_sstream_h
-#define Included_sstream_h
-#include"istream.h"
-#include"ostream.h"
+#ifndef Included_cpcio_sstream_h
+#define Included_cpcio_sstream_h
+#include<cpcio_istream.h>
+#include<cpcio_ostream.h>
 struct cpcio_iss_src;
 struct cpcio_oss_dest;
 struct cpcio____istream*cpcio_open_isstream(const char*);

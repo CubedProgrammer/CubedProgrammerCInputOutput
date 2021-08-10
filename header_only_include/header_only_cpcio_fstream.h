@@ -1,10 +1,10 @@
 #ifndef __cplusplus
-#ifndef Included_header_only_fstream_h
-#define Included_header_only_fstream_h
+#ifndef Included_header_only_cpcio_fstream_h
+#define Included_header_only_cpcio_fstream_h
 #include<stdio.h>
 #include<string.h>
-#include<istream.h>
-#include<ostream.h>
+#include<cpcio_istream.h>
+#include<cpcio_ostream.h>
 #ifndef CPCIO____BUFSZ
 #define CPCIO____BUFSZ 16384
 #endif

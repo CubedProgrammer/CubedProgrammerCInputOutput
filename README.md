@@ -8,28 +8,28 @@ Compiler flags.
 
 -I or /I, for gcc and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required
 
-gcc -O3 -I./include -I./header_only_include -c src/fstream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/cpcio_fstream.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c src/istream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/cpcio_istream.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c src/ostream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/cpcio_ostream.c -fPIC
 
-gcc -O3 -I./include -I./header_only_include -c src/sstream_impl.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/cpcio_sstream.c -fPIC
 
-gcc -shared -o libcpcio.so fstream_impl.o istream_impl.o ostream_impl.o sstream_impl.o
-## istream
-File: istream.h
+gcc -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o
+## cpcio_istream
+File: cpcio_istream.h
 ### Structures
 struct cpcio\_\_\_\_istream
 
-istream (aka struct cpcio\_\_\_\_istream*)
+cpcio_istream (aka struct cpcio\_\_\_\_istream*)
 
-eof flag for istream indicates if the eof has been reached, is->eof is true if eof has been reached.
+eof flag for cpcio_istream indicates if the eof has been reached, is->eof is true if eof has been reached.
 ### Functions
 #### cpcio_close_istream(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
-Closes an istream, returns zero on success.
+Closes a cpcio_istream, returns zero on success.
 #### cpcio_open_istream(src,reader,close)
 Param src is a void pointer, data will be read from it in some way.
 
@@ -40,62 +40,62 @@ The third parameter is a size type, the length of the array and the number of ch
 
 Param close is a pointer to a function, it must return zero on success, and take in a void pointer as a parameter, which will be src.
 
-Opens an istream.
+Opens a cpcio_istream.
 #### cpcio_getc_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads a single character from the stream, or 0xff if eof has been reached.
 #### cpcio_gtoken_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads a token from the stream, returns an empty string if eof has been reached.
 #### cpcio_use_delim(is,s)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Param s is the delim to use.
 
 Sets the delimiter for token based input
 #### cpcio_get_delim(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Gets the delimiter.
 #### cpcio_gint_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads an int from the stream.
 #### cpcio_glong_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads a long from the stream.
 #### cpcio_gll_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads a long long from the stream.
 #### cpcio_gull_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads an unsigned long long from the stream.
 #### cpcio_gfloat_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads a float from the stream.
 #### cpcio_gdouble_is(is)
-Param is is an istream.
+Param is is a cpcio_istream.
 
 Reads a double from the stream
-## ostream
-File: ostream.h
+## cpcio_ostream
+File: cpcio_ostream.h
 ### Structures
 struct cpcio\_\_\_\_ostream
 
-ostream (aka struct cpcio\_\_\_\_ostream*)
+cpcio_ostream (aka struct cpcio\_\_\_\_ostream*)
 ### Functions
 #### cpcio_flush_os(os)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
-Flushes the ostream.
+Flushes the cpcio_ostream.
 #### cpcio_close_ostream(os)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Closes the stream, returns zero if successful.
 #### cpcio_open_ostream(src,writer,close)
@@ -108,107 +108,107 @@ The third parameter is a size type, the length of the array.
 
 Param close is a pointer to a function, it must return zero on success, and take in a void pointer as a parameter, which will be src.
 
-Opens an ostream.
+Opens a cpcio_ostream.
 #### openofs(s,m)
 Param s is a filename.
 
 Param m is the mode, either w for write or a for append.
 
-Opens an ostream that writes to a file.
+Opens a cpcio_ostream that writes to a file.
 #### cpcio_putc_os(os,c)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
-Writes a single charater to the ostream.
+Writes a single charater to the cpcio_ostream.
 #### cpcio_puts_os(os,s)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
-Prints a string to the ostream.
+Prints a string to the cpcio_ostream.
 #### cpcio_putln_os(os,s)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
-Prints a string to the ostream with a \\n.
+Prints a string to the cpcio_ostream with a \\n.
 #### cpcio_psqln_os(os,begin,end)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Params begin and end are iterators that point to strings.
 
-Prints the sequence to an ostream, each item is space separated, and a \\n is put at the end.
+Prints the sequence to a cpcio_ostream, each item is space separated, and a \\n is put at the end.
 #### cpcio_putint_os(os,i)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param i is an int.
 
-Prints an int to the ostream.
+Prints an int to the cpcio_ostream.
 #### cpcio_putl_os(os,l)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param l is a long.
 
-Prints a long to the ostream.
+Prints a long to the cpcio_ostream.
 #### cpcio_putll_os(os,ll)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param ll is a long long.
 
-Prints a long long to the ostream.
+Prints a long long to the cpcio_ostream.
 #### cpcio_plnull_os(os,ull)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param ull is a unsigned long long.
 
-Prints an unsigned long long to the ostream.
+Prints an unsigned long long to the cpcio_ostream.
 #### cpcio_putf_os(os,f)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param f is a float.
 
-Prints a float to the ostream.
+Prints a float to the cpcio_ostream.
 #### cpcio_putd_os(os,d)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param d is a double.
 
-Prints a double to the ostream.
+Prints a double to the cpcio_ostream.
 
 #### cpcio_plnint_os(os,i)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param i is an int.
 
-Prints an int to the ostream with a new line.
+Prints an int to the cpcio_ostream with a new line.
 #### cpcio_plnl_os(os,l)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param l is a long.
 
-Prints a long to the ostream with a new line.
+Prints a long to the cpcio_ostream with a new line.
 #### cpcio_plnll_os(os,ll)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param ll is a long long.
 
-Prints a long long to the ostream with a new line.
+Prints a long long to the cpcio_ostream with a new line.
 #### cpcio_plnull_os(os,ull)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param ull is a unsigned long long.
 
-Prints an unsigned long long to the ostream with a new line.
+Prints an unsigned long long to the cpcio_ostream with a new line.
 #### cpcio_plnf_os(os,f)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param f is a float.
 
-Prints a float to the ostream with a new line.
+Prints a float to the cpcio_ostream with a new line.
 #### cpcio_plnd_os(os,d)
-Param os is an ostream.
+Param os is a cpcio_ostream.
 
 Param d is a double.
 
-Prints a double to the ostream with a new line.
+Prints a double to the cpcio_ostream with a new line.
 
-## sstream
-File: sstream.h
+## cpcio_sstream
+File: cpcio_sstream.h
 
 String streams header. There are input string streams and output string streams.
 ### Structures
@@ -224,8 +224,8 @@ Opens a ostringstream that writes to a string.
 Param oss is a pointer to an ostringstream.
 
 Gets the string from the ostringstream.
-## fstream
-File: fstream.h
+## cpcio_fstream
+File: cpcio_fstream.h
 
 File streams header, for reading and writing to files.
 ### Structures
@@ -234,10 +234,10 @@ This header does not offer any structs.
 #### cpcio_open_ifstream(s)
 Param s is the file name.
 
-Opens an istream that reads from a file.
+Opens a cpcio_istream that reads from a file.
 #### cpcio_open_ofstream(s,m)
 Param s is a filename.
 
 Param m is the mode, either w for write or a for append.
 
-Opens an ostream that writes to a file.
+Opens a cpcio_ostream that writes to a file.

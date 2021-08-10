@@ -1,11 +1,11 @@
 #ifndef __cplusplus
-#ifndef Included_header_only_ostream_h
-#define Included_header_only_ostream_h
+#ifndef Included_header_only_cpcio_ostream_h
+#define Included_header_only_cpcio_ostream_h
 #ifndef CPCIO____BUFSZ
 #define CPCIO____BUFSZ 16384
 #endif
 #include<string.h>
-#include<ostream.h>
+#include<cpcio_ostream.h>
 
 // ostream structure
 // src is written to
