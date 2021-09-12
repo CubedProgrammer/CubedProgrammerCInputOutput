@@ -6,6 +6,7 @@
 struct cpcio_iss_src;
 struct cpcio_oss_dest;
 struct cpcio____istream*cpcio_open_isstream(const char*);
+struct cpcio____istream*cpcio_open_isstream_arr(const char*,size_t);
 struct cpcio____ostream*cpcio_open_osstream(void);
 char*cpcio_oss_str(struct cpcio____ostream*);
 int cpcio_read_iss(void*,char*,size_t);

@@ -5,16 +5,8 @@
 #include<string.h>
 #include<cpcio_istream.h>
 #include<cpcio_ostream.h>
+#include<cpcio_sstream.h>
 #define CPCIO_OSS_SIZE 25001
-struct cpcio_iss_src;
-struct cpcio_oss_dest;
-struct cpcio____istream*cpcio_open_isstream(const char*);
-struct cpcio____ostream*cpcio_open_osstream(void);
-char*cpcio_oss_str(struct cpcio____ostream*);
-int cpcio_read_iss(void*,char*,size_t);
-int cpcio_write_oss(void*,const char*,size_t);
-int cpcio_close_iss(void*);
-int cpcio_close_oss(void*);
 
 // src for istringstream
 // contains string and pointers
@@ -38,10 +30,17 @@ struct cpcio_oss_dest
 // pass in a string and the istringstream will read from that
 struct cpcio____istream*cpcio_open_isstream(const char*s)
 {
+	return cpcio_open_isstream_arr(s,strlen(s));
+}
+
+// opens an istringstream
+// takes in an array instead of a null terminated string
+struct cpcio____istream*cpcio_open_isstream_arr(const char*s,size_t sz)
+{
 	struct cpcio_iss_src*src=(struct cpcio_iss_src*)malloc(sizeof(struct cpcio_iss_src));
 	src->src=s;
 	src->ptr=0;
-	src->tot=strlen(s);
+	src->tot=sz;
 	return cpcio_open_istream((void*)src,&cpcio_read_iss,&cpcio_close_iss);
 }
 
@@ -73,7 +72,7 @@ int cpcio_read_iss(void*src_v_p,char*arr,size_t n)
 	if(src->ptr<src->tot)
 	{
 		size_t i=src->ptr;
-		for(char*__it__=arr;__it__!=arr+n&&i<src->tot;i++)
+		for(char*__it__=arr;__it__!=arr+n&&i<src->tot;++__it__,i++)
 		{
 			*__it__=src->src[i];
 		}

@@ -218,6 +218,12 @@ This header does offer new structs but they are not important for the user to kn
 Param str is a string to read from.
 
 Opens an istringstream that reads from a string.
+#### cpcio_open_isstream_arr(arr,n)
+Param arr is a char array.
+
+Param n is the size of the array.
+
+Opens an istringstream that reads from a string.
 #### cpcio_open_osstream()
 Opens a ostringstream that writes to a string.
 #### cpcio_oss_str(oss)
