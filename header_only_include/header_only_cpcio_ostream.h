@@ -191,79 +191,43 @@ void cpcio_putd_os(struct cpcio____ostream*os,double d)
 // puts an int on a new line
 void cpcio_plnint_os(struct cpcio____ostream*os,int i)
 {
-	char*str=(char*)malloc(12*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%d\n",i);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putint_os(os,i);
+	cpcio_putc_os(os,'\n');
 }
 
 // puts a long on a new line
 void cpcio_plnl_os(struct cpcio____ostream*os,long l)
 {
-	char*str=(char*)malloc(12*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%li\n",l);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putl_os(os,l);
+	cpcio_putc_os(os,'\n');
 }
 
 // puts a long long on a new line
 void cpcio_plnll_os(struct cpcio____ostream*os,long long ll)
 {
-	char*str=(char*)malloc(24*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%lli\n",ll);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putll_os(os,ll);
+	cpcio_putc_os(os,'\n');
 }
 
 // puts a long long unsigned int on a new line
 void cpcio_plnull_os(struct cpcio____ostream*os,unsigned long long ull)
 {
-	char*str=(char*)malloc(24*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%llu\n",ull);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putull_os(os, ull);
+	cpcio_putc_os(os,'\n');
 }
 
 // puts a float on a new line
 void cpcio_plnf_os(struct cpcio____ostream*os,float f)
 {
-	char*str=(char*)malloc(19*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%.8f\n",f);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putf_os(os,f);
+	cpcio_putc_os(os,'\n');
 }
 
 // puts a double on a new line
 void cpcio_plnd_os(struct cpcio____ostream*os,double d)
 {
-	char*str=(char*)malloc(37*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%.17f\n",d);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putd_os(os,d);
+	cpcio_putc_os(os,'\n');
 }
 
 // gets the destination of the stream
