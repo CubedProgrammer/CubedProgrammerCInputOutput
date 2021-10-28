@@ -4,6 +4,7 @@
 #ifndef CPCIO____BUFSZ
 #define CPCIO____BUFSZ 16384
 #endif
+#include<math.h>
 #include<string.h>
 #include<cpcio_ostream.h>
 
@@ -165,27 +166,50 @@ void cpcio_putull_os(struct cpcio____ostream*os,unsigned long long ull)
 // puts a float into the stream
 void cpcio_putf_os(struct cpcio____ostream*os,float f)
 {
-	char*str=(char*)malloc(19*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
-	{
-		*__it__=0;
-	}
-	sprintf(str,"%.8f",f);
-	cpcio_puts_os(os,str);
-	free(str);
+	cpcio_putd_os(os,f);
 }
 
 // puts a double into the stream
 void cpcio_putd_os(struct cpcio____ostream*os,double d)
 {
-	char*str=(char*)malloc(37*sizeof(char));
-	for(char*__it__=str;__it__!=str+12;++__it__)
+	if(d<0)
 	{
-		*__it__=0;
+		cpcio_putc_os(os,'-');
+		d=-d;
 	}
-	sprintf(str,"%.17f",d);
-	cpcio_puts_os(os,str);
-	free(str);
+	if(isnan(d))
+		cpcio_puts_os(os,"nan");
+	else
+	{
+		int exp=0;
+		if(d<0.000000000001)
+		{
+			while(d<1)
+				d*=10,--exp;
+		}
+		else if(d>=1000000000000)
+		{
+			while(d>=10)
+				d*=0.1,++exp;
+		}
+		long long ipart=floor(d);
+		double r=d-floor(d);
+		cpcio_putll_os(os,ipart);
+		cpcio_putc_os(os,'.');
+		r*=10;
+		while(r!=floor(r))
+		{
+			if(r<0)
+				cpcio_putc_os(os,'0');
+			r*=10;
+		}
+		cpcio_putll_os(os,r);
+		if(exp!=0)
+		{
+			cpcio_putc_os(os,'e');
+			cpcio_putint_os(os,exp);
+		}
+	}
 }
 
 // puts an int on a new line
