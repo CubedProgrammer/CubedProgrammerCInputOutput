@@ -34,7 +34,9 @@ struct cpcio____istream
 // closes the istream
 int cpcio_close_istream(struct cpcio____istream*is)
 {
-	return is->close(is->src);
+	int succ = is->close(is->src);
+	free(is);
+	return succ;
 }
 
 // opens an istream given src

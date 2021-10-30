@@ -34,7 +34,9 @@ void cpcio_flush_os(struct cpcio____ostream*os)
 // the close function is called on src
 int cpcio_close_ostream(struct cpcio____ostream*os)
 {
-	return os->close(os->src);
+	int succ = os->close(os->src);
+	free(os);
+	return succ;
 }
 
 // opens an ostream
