@@ -3,7 +3,7 @@
 #define Included_cpcio_ostream_h
 #include<stdio.h>
 #include<stdlib.h>
-#define cpcio_printf_os(os, format, __VA_ARGS__)do{char cbuf[10001];sprintf(cbuf, format, __VA_ARGS__);cpcio_puts_os(os, cbuf);}while(0)
+#define cpcio_printf_os(os, format, ...)do{char cbuf[10001];sprintf(cbuf, format, __VA_ARGS__);cpcio_puts_os(os, cbuf);}while(0)
 struct cpcio____ostream;
 void cpcio_flush_os(struct cpcio____ostream*);
 int cpcio_close_ostream(struct cpcio____ostream*);

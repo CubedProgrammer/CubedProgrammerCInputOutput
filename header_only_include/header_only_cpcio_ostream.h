@@ -181,6 +181,8 @@ void cpcio_putd_os(struct cpcio____ostream*os,double d)
 	}
 	if(isnan(d))
 		cpcio_puts_os(os,"nan");
+	else if(isinf(d))
+		cpcio_puts_os(os,"inf");
 	else
 	{
 		int exp=0;
