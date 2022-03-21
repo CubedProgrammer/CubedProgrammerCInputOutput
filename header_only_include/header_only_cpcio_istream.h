@@ -1,35 +1,9 @@
 #ifndef __cplusplus
 #ifndef Included_header_only_cpcio_istream_h
 #define Included_header_only_cpcio_istream_h
-#ifndef CPCIO____BUFSZ
-#define CPCIO____BUFSZ 16384
-#endif
-#ifndef CPCIO____MAX_DELIM_SIZE
-#define CPCIO____MAX_DELIM_SIZE 100
-#endif
-#include<stdbool.h>
-#include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<cpcio_istream.h>
-
-// the istream structure
-// src is the thing that is read from
-// rd is for reading, the src is passed in
-// and it must read chars into the buffer
-// close function is called when the stream is closed
-struct cpcio____istream
-{
-	void*src;
-	int(*rd)(void*,char*,size_t);
-	int(*close)(void*);
-	bool eof;
-	short last;
-	char cbuf[CPCIO____BUFSZ];
-	unsigned short bufs;
-	char delim[CPCIO____MAX_DELIM_SIZE];
-	unsigned short delimsz;
-};
 
 // closes the istream
 int cpcio_close_istream(struct cpcio____istream*is)
@@ -56,6 +30,7 @@ struct cpcio____istream*cpcio_open_istream(void*src,int(*rdr)(void*,char*,size_t
 	is->src=src;
 	is->rd=rdr;
 	is->close=close;
+	is->ready=NULL;
 	is->eof=false;
 	is->bufs=CPCIO____BUFSZ;
 	is->delimsz=3;
@@ -230,6 +205,12 @@ double cpcio_gdouble_is(struct cpcio____istream*is)
 	double d=strtod(t,NULL);
 	free(t);
 	return d;
+}
+
+// Returns true if there are currently more bytes waiting to be read.
+int cpcio_istream_ready(struct cpcio____istream*is)
+{
+	return is->ready(is->src);
 }
 
 // gets the source
