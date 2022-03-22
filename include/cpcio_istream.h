@@ -21,6 +21,7 @@ struct cpcio____istream
 	int(*close)(void*);
 	int(*ready)(void*);
 	bool eof;
+	bool ubuf;
 	short last;
 	char cbuf[CPCIO____BUFSZ];
 	unsigned short bufs;
@@ -30,6 +31,7 @@ struct cpcio____istream
 int cpcio_close_istream(struct cpcio____istream*);
 struct cpcio____istream*cpcio_open_istream(void*,int(*)(void*,char*,size_t),int(*)(void*));
 size_t cpcio_rd(struct cpcio____istream*,void*,size_t);
+void cpcio_toggle_buf_is(struct cpcio____istream*);
 int cpcio_getc_is(struct cpcio____istream*);
 void cpcio_ungetc_is(struct cpcio____istream*);
 char*cpcio_gtoken_is(struct cpcio____istream*);

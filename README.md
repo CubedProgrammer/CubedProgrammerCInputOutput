@@ -4,17 +4,13 @@ C Streams Library
 ## Installation Instructions
 Download or clone the repository. Put it in a folder on your hard drive.
 
+On Mac OS X, linux, BSD, or any Unix-based system, copy the headers into /usr/local/include.
+
 Compiler flags.
 
--I or /I, for gcc and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required
+-I or /I, for gcc or clang, and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required, on windows.
 
-gcc -O3 -I./include -I./header_only_include -c src/cpcio_fstream.c -fPIC
-
-gcc -O3 -I./include -I./header_only_include -c src/cpcio_istream.c -fPIC
-
-gcc -O3 -I./include -I./header_only_include -c src/cpcio_ostream.c -fPIC
-
-gcc -O3 -I./include -I./header_only_include -c src/cpcio_sstream.c -fPIC
+gcc -O3 -I./include -I./header_only_include -c src/cpcio_fstream.c src/cpcio_istream.c src/cpcio_ostream.c src/cpcio_sstream.c src/cpcio_stdstream.c -fPIC
 
 gcc -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o
 ## cpcio_istream
@@ -41,6 +37,14 @@ The third parameter is a size type, the length of the array and the number of ch
 Param close is a pointer to a function, it must return zero on success, and take in a void pointer as a parameter, which will be src.
 
 Opens a cpcio_istream.
+#### cpcio_rd(is,buf,sz)
+Param is is a cpcio_istream.
+
+Param buf is a void pointer to a buffer, the data will be written to it.
+
+Param sz is the number of bytes to read.
+
+Reads up to sz bytes and returns the number of bytes read, stores the data in buf.
 #### cpcio_getc_is(is)
 Param is is a cpcio_istream.
 
@@ -109,6 +113,14 @@ The third parameter is a size type, the length of the array.
 Param close is a pointer to a function, it must return zero on success, and take in a void pointer as a parameter, which will be src.
 
 Opens a cpcio_ostream.
+#### cpcio_wr(os,buf,sz)
+Param os is a cpcio_ostream.
+
+Param buf is a const void pointer to a buffer, the data that will be written.
+
+Param sz is the number of bytes to write.
+
+Writes up to sz bytes and returns the number of bytes written.
 #### openofs(s,m)
 Param s is a filename.
 

@@ -32,6 +32,7 @@ struct cpcio____istream*cpcio_open_istream(void*src,int(*rdr)(void*,char*,size_t
 	is->close=close;
 	is->ready=NULL;
 	is->eof=false;
+	is->ubuf=true;
 	is->bufs=CPCIO____BUFSZ;
 	is->delimsz=3;
 	is->last=0;
@@ -45,13 +46,24 @@ size_t cpcio_rd(struct cpcio____istream*is,void*buf,size_t sz)
 	return is->rd(is->src,buf,sz);
 }
 
+// toggle use buffer or not
+void cpcio_toggle_buf_is(struct cpcio____istream*is)
+{
+	is->ubuf = !is->ubuf;
+}
+
 // gets one character
-// or 0xff is eof is reached
+// or -1 if eof is reached
 int cpcio_getc_is(struct cpcio____istream*is)
 {
 	if(is->eof)
 	{
 		return-1;
+	}
+	else if(!is->ubuf)
+	{
+		char ch;
+		return is->rd(is->src,&ch,1) == 0 ? -1 : ch;
 	}
 	else if(is->bufs<CPCIO____BUFSZ)
 	{

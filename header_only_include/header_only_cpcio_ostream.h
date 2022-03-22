@@ -5,6 +5,7 @@
 #define CPCIO____BUFSZ 16384
 #endif
 #include<math.h>
+#include<stdbool.h>
 #include<string.h>
 #include<cpcio_ostream.h>
 
@@ -15,6 +16,7 @@
 // close is the close function that will be called on src
 struct cpcio____ostream
 {
+	bool ubuf;
 	char cbuf[CPCIO____BUFSZ];
 	unsigned short bufs;
 	void*src;
@@ -45,6 +47,7 @@ int cpcio_close_ostream(struct cpcio____ostream*os)
 struct cpcio____ostream*cpcio_open_ostream(void*src,int(*rtr)(void*,const char*,size_t),int(*close)(void*))
 {
 	struct cpcio____ostream*os=(struct cpcio____ostream*)malloc(sizeof(struct cpcio____ostream));
+	os->ubuf=true;
 	os->src=src;
 	os->rt=rtr;
 	os->close=close;
@@ -63,16 +66,36 @@ size_t cpcio_wr(struct cpcio____ostream*os,const void*buf,size_t sz)
 	return os->rt(os->src,buf,sz);
 }
 
+// toggle use buffer or not
+void cpcio_toggle_buf_os(struct cpcio____ostream*os)
+{
+	if(os->ubuf)
+	{
+		os->rt(os->src,os->cbuf,os->bufs);
+		os->ubuf=false;
+	}
+	else
+	{
+		os->bufs=0;
+		os->ubuf=true;
+	}
+}
+
 // puts a single character into the stream
 // is written onto the buffer until full
 void cpcio_putc_os(struct cpcio____ostream*os,const char c)
 {
-	if(os->bufs==CPCIO____BUFSZ)
+	if(os->ubuf)
 	{
-		cpcio_flush_os(os);
+		if(os->bufs==CPCIO____BUFSZ)
+		{
+			cpcio_flush_os(os);
+		}
+		os->cbuf[os->bufs]=c;
+		++os->bufs;
 	}
-	os->cbuf[os->bufs]=c;
-	++os->bufs;
+	else
+		os->rt(os->src,&c,1);
 }
 
 // writes a string to the stream

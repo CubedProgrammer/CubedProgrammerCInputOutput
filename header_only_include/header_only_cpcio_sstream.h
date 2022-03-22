@@ -50,6 +50,7 @@ struct cpcio____istream*cpcio_open_isstream_arr(const char*s,size_t sz)
 	src->tot=sz;
 	struct cpcio____istream *is = cpcio_open_istream((void*)src,&cpcio_read_iss,&cpcio_close_iss);
 	is->ready = &cpcio_iss_ready;
+	return is;
 }
 
 // opens an ostringstream
