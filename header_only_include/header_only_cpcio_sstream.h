@@ -26,6 +26,13 @@ struct cpcio_oss_dest
 	size_t tot;
 };
 
+// Test if there are more characters
+int cpcio_iss_ready(void*src)
+{
+	struct cpcio_iss_src *s = src;
+	return s->ptr < s->tot;
+}
+
 // opens an istringstream that reads from a string
 // pass in a string and the istringstream will read from that
 struct cpcio____istream*cpcio_open_isstream(const char*s)
@@ -41,7 +48,8 @@ struct cpcio____istream*cpcio_open_isstream_arr(const char*s,size_t sz)
 	src->src=s;
 	src->ptr=0;
 	src->tot=sz;
-	return cpcio_open_istream((void*)src,&cpcio_read_iss,&cpcio_close_iss);
+	struct cpcio____istream *is = cpcio_open_istream((void*)src,&cpcio_read_iss,&cpcio_close_iss);
+	is->ready = &cpcio_iss_ready;
 }
 
 // opens an ostringstream

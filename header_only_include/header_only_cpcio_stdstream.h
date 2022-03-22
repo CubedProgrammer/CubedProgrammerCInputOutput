@@ -1,9 +1,12 @@
 #ifndef __cplusplus
 #ifndef Included_header_only_cpcio_stdstream_h
 #define Included_header_only_cpcio_stdstream_h
+#include<stdint.h>
 #ifdef _WIN32
 #include<windows.h>
 #else
+#include<sys/select.h>
+#include<time.h>
 #include<unistd.h>
 #endif
 #include<cpcio_stdstream.h>
@@ -19,7 +22,7 @@ int cpcio____rd_stdin(void*src,char*buf,size_t sz)
 	ReadFile(src, buf, sz, &bc, NULL);
 	return bc;
 #else
-	return read((int)src,buf,sz);
+	return read((intptr_t)src,buf,sz);
 #endif
 }
 
@@ -31,7 +34,7 @@ int cpcio____wr_stdouterr(void*src,const char*buf,size_t sz)
 	WriteFile(src, buf, sz, &bc, NULL);
 	return bc;
 #else
-	return write((int)src,buf,sz);
+	return write((intptr_t)src,buf,sz);
 #endif
 }
 
@@ -41,18 +44,38 @@ int cpcio____close_stdstream(void*src)
 #ifdef _WIN32
 	return CloseHandle(src);
 #else
-	return close((int)src);
+	return close((intptr_t)src);
 #endif
+}
+
+int cpcio_stdin_ready(void*src)
+{
+	int ready = 0;
+#ifdef _WIN32
+#else
+		intptr_t fd = (intptr_t)src;
+		struct timeval tv;
+		tv.tv_sec = 0;
+		tv.tv_usec = 0;
+		fd_set rfd, *rfdp = &rfd;
+		FD_ZERO(rfdp);
+		FD_SET(fd, rfdp);
+		ready = select(1, rfdp, NULL, NULL, &tv);
+#endif
+	return ready;
 }
 
 struct cpcio____istream*cpcio_get_stdin(void)
 {
 	if(cpcio_stdin == NULL)
+	{
 #ifdef _WIN32
 		cpcio_stdin = cpcio_open_istream(GetStdHandle(STD_INPUT_HANDLE), cpcio____rd_stdin, cpcio____close_stdstream);
 #else
 		cpcio_stdin = cpcio_open_istream((void*)STDIN_FILENO, cpcio____rd_stdin, cpcio____close_stdstream);
+		cpcio_stdin->ready = &cpcio_stdin_ready;
 #endif
+	}
 	return cpcio_stdin;
 }
 
