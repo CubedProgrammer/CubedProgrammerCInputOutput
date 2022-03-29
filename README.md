@@ -248,7 +248,7 @@ Param arr is a char array.
 Param n is the size of the array.
 
 Opens an istringstream that reads from a string.
-#### cpcio_open_osstream()
+#### cpcio_open_osstream(void)
 Opens a ostringstream that writes to a string.
 #### cpcio_oss_str(oss)
 Param oss is a pointer to an ostringstream.
@@ -271,3 +271,16 @@ Param s is a filename.
 Param m is the mode, either w for write or a for append.
 
 Opens a cpcio_ostream that writes to a file.
+## cpcio_stdstream
+File: cpcio_stdstream.h
+
+File streams header, for reading and writing to files.
+### Structures
+This header does not offer any structs.
+### Functions
+#### cpcio_get_stdin(void)
+Gets a cpcio_istream that reads from stdin.
+#### cpcio_get_stdout(void)
+Gets a cpcio_ostream that reads from stdout.
+#### cpcio_get_stderr(void)
+Gets a cpcio_ostream that reads from stderr.

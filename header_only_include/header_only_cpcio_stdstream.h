@@ -60,7 +60,7 @@ int cpcio_stdin_ready(void*src)
 		fd_set rfd, *rfdp = &rfd;
 		FD_ZERO(rfdp);
 		FD_SET(fd, rfdp);
-		ready = select(1, rfdp, NULL, NULL, &tv);
+		ready = select(fd + 1, rfdp, NULL, NULL, &tv);
 #endif
 	return ready;
 }
