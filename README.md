@@ -12,7 +12,7 @@ Compiler flags.
 
 gcc -O3 -I./include -I./header_only_include -c src/cpcio_fstream.c src/cpcio_istream.c src/cpcio_ostream.c src/cpcio_sstream.c src/cpcio_stdstream.c -fPIC
 
-gcc -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o
+gcc -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o cpcio_stdstream.o
 ## cpcio_istream
 File: cpcio_istream.h
 ### Structures
@@ -45,10 +45,18 @@ Param buf is a void pointer to a buffer, the data will be written to it.
 Param sz is the number of bytes to read.
 
 Reads up to sz bytes and returns the number of bytes read, stores the data in buf.
+#### cpcio_toggle_buf_is(is)
+Toggles whether or not to use buffered input.
+
+This should only be used to disable buffering before reading any input, or enabling buffering.
+
+Disabling buffering may cause any unread data in the buffer to become lost.
 #### cpcio_getc_is(is)
 Param is is a cpcio_istream.
 
 Reads a single character from the stream, or 0xff if eof has been reached.
+#### cpcio_ungetc_is(is)
+Puts the last read character back, only works if buffer is available.
 #### cpcio_gtoken_is(is)
 Param is is a cpcio_istream.
 
@@ -87,6 +95,12 @@ Reads a float from the stream.
 Param is is a cpcio_istream.
 
 Reads a double from the stream
+#### cpcio_istream_ready(is)
+Checks if there are bytes ready to read.
+
+If return value is true, then there is data to read.
+
+Otherwise, either end of stream has been reached or the stream has to wait for data to be sent.
 ## cpcio_ostream
 File: cpcio_ostream.h
 ### Structures
@@ -121,12 +135,10 @@ Param buf is a const void pointer to a buffer, the data that will be written.
 Param sz is the number of bytes to write.
 
 Writes up to sz bytes and returns the number of bytes written.
-#### openofs(s,m)
-Param s is a filename.
+#### cpcio_toggle_buf_os(os)
+Toggles whether or not to buffer the output.
 
-Param m is the mode, either w for write or a for append.
-
-Opens a cpcio_ostream that writes to a file.
+Toggling off will cause the buffer to be flushed.
 #### cpcio_putc_os(os,c)
 Param os is a cpcio_ostream.
 
@@ -163,7 +175,7 @@ Param os is a cpcio_ostream.
 Param ll is a long long.
 
 Prints a long long to the cpcio_ostream.
-#### cpcio_plnull_os(os,ull)
+#### cpcio_putull_os(os,ull)
 Param os is a cpcio_ostream.
 
 Param ull is a unsigned long long.

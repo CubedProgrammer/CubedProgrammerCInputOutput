@@ -30,7 +30,7 @@ struct cpcio____istream*cpcio_open_istream(void*src,int(*rdr)(void*,char*,size_t
 	is->src=src;
 	is->rd=rdr;
 	is->close=close;
-	is->ready=NULL;
+	is->ready=&cpcio_default_ready;
 	is->eof=false;
 	is->ubuf=true;
 	is->bufs=CPCIO____BUFSZ;
@@ -223,6 +223,12 @@ double cpcio_gdouble_is(struct cpcio____istream*is)
 int cpcio_istream_ready(struct cpcio____istream*is)
 {
 	return is->ready(is->src);
+}
+
+// default ready function, always returns false
+int cpcio_default_ready(void*src)
+{
+	return 0;
 }
 
 // gets the source

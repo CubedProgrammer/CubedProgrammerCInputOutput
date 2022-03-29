@@ -44,6 +44,7 @@ unsigned long long cpcio_gull_is(struct cpcio____istream*);
 float cpcio_gfloat_is(struct cpcio____istream*);
 double cpcio_gdouble_is(struct cpcio____istream*);
 int cpcio_istream_ready(struct cpcio____istream*);
+int cpcio_default_ready(void*);
 void*cpcio_src_is(struct cpcio____istream*);
 typedef struct cpcio____istream*cpcio_istream;
 typedef struct cpcio____istream*istream;
