@@ -9,10 +9,15 @@ On Mac OS X, linux, BSD, or any Unix-based system, copy the headers into /usr/lo
 Compiler flags.
 
 -I or /I, for gcc or clang, and msvc respectively, and then use paths C:/Path/To/The/Library/CubedProgrammerCInputOutput/lib C:/Path/To/The/Library/CubedProgrammerCInputOutput/header_only_include, both are required, on windows.
-
+```
 gcc -O3 -I./include -I./header_only_include -c src/cpcio_fstream.c src/cpcio_istream.c src/cpcio_ostream.c src/cpcio_sstream.c src/cpcio_stdstream.c -fPIC
-
-gcc -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o cpcio_stdstream.o
+gcc -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o cpcio_stdstream.o -lm
+```
+or
+```
+clang -O3 -I./include -I./header_only_include -c src/cpcio_fstream.c src/cpcio_istream.c src/cpcio_ostream.c src/cpcio_sstream.c src/cpcio_stdstream.c -fPIC
+clang -shared -o libcpcio.so cpcio_fstream.o cpcio_istream.o cpcio_ostream.o cpcio_sstream.o cpcio_stdstream.o -lm
+```
 ## cpcio_istream
 File: cpcio_istream.h
 ### Structures
