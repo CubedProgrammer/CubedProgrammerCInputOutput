@@ -9,8 +9,8 @@ struct cpcio____istream*cpcio_open_isstream(const char*);
 struct cpcio____istream*cpcio_open_isstream_arr(const char*,size_t);
 struct cpcio____ostream*cpcio_open_osstream(void);
 char*cpcio_oss_str(struct cpcio____ostream*);
-int cpcio_read_iss(void*,char*,size_t);
-int cpcio_write_oss(void*,const char*,size_t);
+size_t cpcio_read_iss(void*,void*,size_t);
+size_t cpcio_write_oss(void*,const void*,size_t);
 int cpcio_close_iss(void*);
 int cpcio_close_oss(void*);
 #endif

@@ -13,8 +13,8 @@
 struct cpcio_iss_src
 {
 	const char*src;
-	size_t ptr;
-	size_t tot;
+	const char*ptr;
+	const char*end;
 };
 
 // src for ostringstream
@@ -30,7 +30,7 @@ struct cpcio_oss_dest
 int cpcio_iss_ready(void*src)
 {
 	struct cpcio_iss_src *s = src;
-	return s->ptr < s->tot;
+	return s->ptr<s->end;
 }
 
 // opens an istringstream that reads from a string
@@ -46,8 +46,8 @@ struct cpcio____istream*cpcio_open_isstream_arr(const char*s,size_t sz)
 {
 	struct cpcio_iss_src*src=(struct cpcio_iss_src*)malloc(sizeof(struct cpcio_iss_src));
 	src->src=s;
-	src->ptr=0;
-	src->tot=sz;
+	src->ptr=s;
+	src->end=s+sz;
 	struct cpcio____istream *is = cpcio_open_istream((void*)src,&cpcio_read_iss,&cpcio_close_iss);
 	is->ready = &cpcio_iss_ready;
 	return is;
@@ -75,41 +75,29 @@ char*cpcio_oss_str(struct cpcio____ostream*oss)
 
 // read from istringstream
 // given to istream's rd function pointer
-int cpcio_read_iss(void*src_v_p,char*arr,size_t n)
+size_t cpcio_read_iss(void*src_v_p,void*arr,size_t n)
 {
 	struct cpcio_iss_src*src=(struct cpcio_iss_src*)src_v_p;
-	if(src->ptr<src->tot)
+	n=n<src->end-src->ptr?n:src->end-src->ptr;
+	if(n)
 	{
-		size_t i=src->ptr;
-		for(char*__it__=arr;__it__!=arr+n&&i<src->tot;++__it__,i++)
-		{
-			*__it__=src->src[i];
-		}
-		size_t tmp=i;
-		i-=src->ptr;
-		src->ptr=tmp;
-		return i;
+		memcpy(arr,src->ptr,n);
+		src->ptr+=n;
 	}
-	else
-	{
-		return 0;
-	}
+	return n;
 }
 
 // write to ostringstream
 // given to ostream's rt function pointer
-int cpcio_write_oss(void*src_v_p,const char*arr,size_t n)
+size_t cpcio_write_oss(void*src_v_p,const void*arr,size_t n)
 {
 	struct cpcio_oss_dest*src=(struct cpcio_oss_dest*)src_v_p;
 	if(src->ptr+n>src->tot)
 	{
 		src->dest=realloc(src->dest,n>src->tot?src->tot*3+n:src->tot+n*3);
 	}
-	for(size_t i=0;i<n;i++,++src->ptr)
-	{
-		src->dest[src->ptr]=arr[i];
-	}
-	src->dest[src->ptr]=0;
+	memcpy(src->dest+src->ptr,arr,n);
+	src->ptr+=n;
 	return n;
 }
 

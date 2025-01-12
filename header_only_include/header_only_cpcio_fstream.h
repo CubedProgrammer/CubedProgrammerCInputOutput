@@ -10,8 +10,8 @@
 #endif
 struct cpcio____istream*cpcio_open_ifstream(const char*);
 struct cpcio____ostream*cpcio_open_ofstream(const char*,const char*);
-int cpcio_read_ifs(void*,char*,size_t);
-int cpcio_write_ofs(void*,const char*,size_t);
+size_t cpcio_read_ifs(void*,void*,size_t);
+size_t cpcio_write_ofs(void*,const void*,size_t);
 int cpcio_close_fs(void*);
 int cpcio_fs_ready(void*);
 
@@ -52,17 +52,14 @@ int cpcio_fs_ready(void *src)
 
 // function for reading from ifstream src
 // given to istream's rd function pointer
-int cpcio_read_ifs(void*src,char*arr,size_t n)
+size_t cpcio_read_ifs(void*src,void*arr,size_t n)
 {
-	size_t t=fread(arr,sizeof(char),n,(FILE*)src);
-	if(t<CPCIO____BUFSZ)
-		memset(arr+t,-1,CPCIO____BUFSZ-t);
-	return t;
+	return fread(arr,sizeof(char),n,(FILE*)src);
 }
 
 // function for writing to ofstream dest
 // given to ostream's rt function pointer
-int cpcio_write_ofs(void*src,const char*arr,size_t n)
+size_t cpcio_write_ofs(void*src,const void*arr,size_t n)
 {
 	return fwrite(arr,sizeof(char),n,(FILE*)src);
 }

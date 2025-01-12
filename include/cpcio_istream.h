@@ -17,21 +17,23 @@
 struct cpcio____istream
 {
 	void*src;
-	int(*rd)(void*,char*,size_t);
+	size_t(*rd)(void*,void*,size_t);
 	int(*close)(void*);
 	int(*ready)(void*);
 	bool eof;
 	bool ubuf;
 	short last;
 	char cbuf[CPCIO____BUFSZ];
+	unsigned short bufi;
 	unsigned short bufs;
 	char delim[CPCIO____MAX_DELIM_SIZE];
 	unsigned short delimsz;
 };
 int cpcio_close_istream(struct cpcio____istream*);
-struct cpcio____istream*cpcio_open_istream(void*,int(*)(void*,char*,size_t),int(*)(void*));
+struct cpcio____istream*cpcio_open_istream(void*,size_t(*)(void*,void*,size_t),int(*)(void*));
 size_t cpcio_rd(struct cpcio____istream*,void*,size_t);
 void cpcio_toggle_buf_is(struct cpcio____istream*);
+int cpcio_eof_is(struct cpcio____istream*);
 int cpcio_getc_is(struct cpcio____istream*);
 void cpcio_ungetc_is(struct cpcio____istream*);
 char*cpcio_gtoken_is(struct cpcio____istream*);

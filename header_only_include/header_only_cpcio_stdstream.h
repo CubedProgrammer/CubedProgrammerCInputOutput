@@ -15,7 +15,7 @@ struct cpcio____ostream*cpcio_stdout;
 struct cpcio____ostream*cpcio_stderr;
 
 // function for reading from stdin
-int cpcio____rd_stdin(void*src,char*buf,size_t sz)
+size_t cpcio____rd_stdin(void*src,void*buf,size_t sz)
 {
 #ifdef _WIN32
 	DWORD bc;
@@ -27,7 +27,7 @@ int cpcio____rd_stdin(void*src,char*buf,size_t sz)
 }
 
 // function for writing to stdout and stderr
-int cpcio____wr_stdouterr(void*src,const char*buf,size_t sz)
+size_t cpcio____wr_stdouterr(void*src,const void*buf,size_t sz)
 {
 #ifdef _WIN32
 	DWORD bc;

@@ -20,7 +20,7 @@ struct cpcio____ostream
 	char cbuf[CPCIO____BUFSZ];
 	unsigned short bufs;
 	void*src;
-	int(*rt)(void*,const char*,size_t);
+	size_t(*rt)(void*,const void*,size_t);
 	int(*close)(void*);
 };
 
@@ -44,9 +44,9 @@ int cpcio_close_ostream(struct cpcio____ostream*os)
 // opens an ostream
 // should only be used if implementing a new type of ostream
 // takes in the src pointer, rt, and close function pointers
-struct cpcio____ostream*cpcio_open_ostream(void*src,int(*rtr)(void*,const char*,size_t),int(*close)(void*))
+struct cpcio____ostream*cpcio_open_ostream(void*src,size_t(*rtr)(void*,const void*,size_t),int(*close)(void*))
 {
-	struct cpcio____ostream*os=(struct cpcio____ostream*)malloc(sizeof(struct cpcio____ostream));
+	struct cpcio____ostream*os=malloc(sizeof(struct cpcio____ostream));
 	os->ubuf=true;
 	os->src=src;
 	os->rt=rtr;

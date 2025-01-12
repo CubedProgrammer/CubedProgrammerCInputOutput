@@ -15,16 +15,16 @@ int cpcio_close_istream(struct cpcio____istream*is)
 
 // opens an istream given src
 // and pointers to required functions
-struct cpcio____istream*cpcio_open_istream(void*src,int(*rdr)(void*,char*,size_t),int(*close)(void*))
+struct cpcio____istream*cpcio_open_istream(void*src,size_t(*rdr)(void*,void*,size_t),int(*close)(void*))
 {
-	struct cpcio____istream*is=(struct cpcio____istream*)malloc(sizeof(struct cpcio____istream));
-	for(char*__it__=is->cbuf;__it__!=is->cbuf+CPCIO____BUFSZ;++__it__)
+	struct cpcio____istream*is=malloc(sizeof(struct cpcio____istream));
+	for(char*it=is->cbuf;it!=is->cbuf+CPCIO____BUFSZ;++it)
 	{
-		*__it__=-1;
+		*it=-1;
 	}
-	for(char*__it__=is->delim;__it__!=is->delim+CPCIO____MAX_DELIM_SIZE;++__it__)
+	for(char*it=is->delim;it!=is->delim+CPCIO____MAX_DELIM_SIZE;++it)
 	{
-		*__it__=-1;
+		*it=-1;
 	}
 	strcpy(is->delim,"\n\t ");
 	is->src=src;
@@ -33,7 +33,8 @@ struct cpcio____istream*cpcio_open_istream(void*src,int(*rdr)(void*,char*,size_t
 	is->ready=&cpcio_default_ready;
 	is->eof=false;
 	is->ubuf=true;
-	is->bufs=CPCIO____BUFSZ;
+	is->bufi=0;
+	is->bufs=0;
 	is->delimsz=3;
 	is->last=0;
 	return is;
@@ -52,6 +53,12 @@ void cpcio_toggle_buf_is(struct cpcio____istream*is)
 	is->ubuf = !is->ubuf;
 }
 
+// returns non-zero if end of stream is reached, zero if not
+int cpcio_eof_is(struct cpcio____istream*is)
+{
+	return is->eof;
+}
+
 // gets one character
 // or -1 if eof is reached
 int cpcio_getc_is(struct cpcio____istream*is)
@@ -65,29 +72,33 @@ int cpcio_getc_is(struct cpcio____istream*is)
 		char ch;
 		return is->rd(is->src,&ch,1) == 0 ? -1 : ch;
 	}
-	else if(is->bufs<CPCIO____BUFSZ)
+	else if(is->bufi<is->bufs)
 	{
-		char c=is->cbuf[is->bufs];
-		++is->bufs;
+		char c=is->cbuf[is->bufi];
+		++is->bufi;
 		return c;
 	}
 	else if(is->last > 0xff)
 	{
-		char c = is->last;
-		is->last &= 0xff;
+		char c=is->last;
+		is->last&=0xff;
 		return c;
 	}
 	else
 	{
 		is->last = is->cbuf[CPCIO____BUFSZ - 1] == -1 ? 0 : is->cbuf[CPCIO____BUFSZ - 1];
-		int c=is->rd(is->src,is->cbuf,CPCIO____BUFSZ);
-		is->bufs=1;
-		if(c==0)
+		is->bufs=is->rd(is->src,is->cbuf,CPCIO____BUFSZ);
+		if(is->bufs==0)
 		{
+			is->bufi=0;
 			is->bufs=0;
 			is->eof=true;
 		}
-		return c==0?-1:*is->cbuf;
+		else
+		{
+			is->bufi=1;
+		}
+		return is->bufs==0?-1:*is->cbuf;
 	}
 }
 
