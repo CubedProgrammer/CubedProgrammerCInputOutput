@@ -113,36 +113,46 @@ void cpcio_ungetc_is(struct cpcio____istream *is)
 }
 
 // reads a token based on delimiters
-// returns it as a heap allocated char array
+// returns it as a heap allocated null-terminated string
 char*cpcio_gtoken_is(struct cpcio____istream*is)
 {
-	char ch=cpcio_getc_is(is);
-	bool delim=false;
+	return cpcio_gtoken_save_is(is,0);
+}
+
+// reads a token based on delimiters
+// if save is true, then the delimiter is also saved into the string
+// returns it as a heap allocated null-terminated string
+char*cpcio_gtoken_save_is(struct cpcio____istream*is, int save)
+{
+	int ch=cpcio_getc_is(is);
+	int delim=0;
 	char*tmp=(char*)malloc(CPCIO____BUFSZ*sizeof(char));
 	size_t as=CPCIO____BUFSZ;
 	size_t ts=0;
-	for(size_t i=0;i<is->delimsz;i++)
-	{
-		if(ch==-1||is->delim[i]==ch)
-		{
-			delim=true;
-		}
-	}
 	while(!delim)
 	{
-		if(ts==as)
-		{
-			tmp=realloc(tmp,as+CPCIO____BUFSZ);
-		}
-		tmp[ts]=ch;
-		++ts;
-		ch=cpcio_getc_is(is);
-		delim=false;
 		for(size_t i=0;i<is->delimsz;i++)
 		{
-			if(ch==-1||is->delim[i]==ch)
+			if(is->delim[i]==ch)
 			{
-				delim=true;
+				delim=is->delim[i];
+			}
+		}
+		if(ch==-1)
+		{
+			delim=-1;
+		}
+		if(delim!=-1&&(!delim||save))
+		{
+			if(ts==as)
+			{
+				tmp=realloc(tmp,as+CPCIO____BUFSZ);
+			}
+			tmp[ts]=ch;
+			++ts;
+			if(!delim)
+			{
+				ch=cpcio_getc_is(is);
 			}
 		}
 	}
@@ -153,21 +163,27 @@ char*cpcio_gtoken_is(struct cpcio____istream*is)
 
 // change the delim used by the stream
 // if any char in the str is found, the token is returned
-void cpcio_use_delim(struct cpcio____istream*is,const char*str)
+// returns zero on success, fails if the delimiter array exceeds the maximum size
+int cpcio_use_delim(struct cpcio____istream*is,const char*str)
 {
-	is->delimsz=strlen(str);
-	strcpy(is->delim,str);
+	size_t len=strlen(str);
+	if(len+1<CPCIO____MAX_DELIM_SIZE)
+	{
+		is->delimsz=len;
+		strcpy(is->delim,str);
+		return 0;
+	}
+	else
+	{
+		return-1;
+	}
 }
 
 // get the delimiter
-// the string returned is allocated with malloc
-// and is a copy of the delimiter
-// changing it won't affect anything
-char*cpcio_get_delim(struct cpcio____istream*is)
+// the string will be null-terminated
+const char*cpcio_get_delim(struct cpcio____istream*is)
 {
-	char*delim=(char*)malloc(is->delimsz*sizeof(char));
-	strncpy(delim,is->delim,is->delimsz);
-	return delim;
+	return is->delim;
 }
 
 // get an int
