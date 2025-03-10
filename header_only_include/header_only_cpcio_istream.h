@@ -44,7 +44,14 @@ struct cpcio____istream*cpcio_open_istream(void*src,size_t(*rdr)(void*,void*,siz
 // returns the number of bytes read
 size_t cpcio_rd(struct cpcio____istream*is,void*buf,size_t sz)
 {
-	return is->rd(is->src,buf,sz);
+	size_t cnt=0;
+	if(is->ubuf&&is->bufs>is->bufi)
+	{
+		cnt=is->bufs-is->bufi>sz?sz:is->bufs-is->bufi;
+		buf=memcpy(buf,is->cbuf,cnt);
+		sz-=cnt;
+	}
+	return cnt+is->rd(is->src,buf,sz);
 }
 
 // toggle use buffer or not
