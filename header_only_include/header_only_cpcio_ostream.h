@@ -64,7 +64,8 @@ struct cpcio____ostream*cpcio_open_ostream(void*src,size_t(*rtr)(void*,const voi
 size_t cpcio_wr(struct cpcio____ostream*os,const void*buf,size_t sz)
 {
 	cpcio_flush_os(os);
-	return os->rt(os->src,buf,sz);
+	size_t bc=os->rt(os->src,buf,sz);
+	return bc*(bc<=sz);
 }
 
 // toggle use buffer or not

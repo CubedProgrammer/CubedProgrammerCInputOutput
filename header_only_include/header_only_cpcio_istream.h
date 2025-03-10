@@ -53,7 +53,8 @@ size_t cpcio_rd(struct cpcio____istream*is,void*buf,size_t sz)
 		is->bufi+=cnt;
 		sz-=cnt;
 	}
-	return cnt+is->rd(is->src,buf,sz);
+	size_t bc=is->rd(is->src,buf,sz);
+	return cnt+bc*(bc<=sz);
 }
 
 // toggle use buffer or not
