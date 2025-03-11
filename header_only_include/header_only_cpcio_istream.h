@@ -49,11 +49,12 @@ size_t cpcio_rd(struct cpcio____istream*is,void*buf,size_t sz)
 	{
 		cnt=is->bufs-is->bufi;
 		cnt=sz<cnt?sz:cnt;
-		buf=memcpy(buf,is->cbuf+is->bufi,cnt);
+		memcpy(buf,is->cbuf+is->bufi,cnt);
+		buf+=cnt;
 		is->bufi+=cnt;
 		sz-=cnt;
 	}
-	size_t bc=is->rd(is->src,buf,sz);
+	size_t bc=sz==0?0:is->rd(is->src,buf,sz);
 	return cnt+bc*(bc<=sz);
 }
 
