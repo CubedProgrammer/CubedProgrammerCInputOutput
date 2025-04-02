@@ -31,6 +31,7 @@ struct cpcio____istream*cpcio_open_istream(void*src,size_t(*rdr)(void*,void*,siz
 	is->rd=rdr;
 	is->close=close;
 	is->ready=&cpcio_default_ready;
+	is->select=&cpcio_default_select;
 	is->eof=false;
 	is->ubuf=true;
 	is->bufi=0;
@@ -257,6 +258,34 @@ double cpcio_gdouble_is(struct cpcio____istream*is)
 	return d;
 }
 
+int cpcio_istream_select(struct cpcio____istream**first,struct cpcio____istream**last,long milliseconds)
+{
+	if(first==last)
+	{
+		return 0;
+	}
+	else
+	{
+		int succ=-1;
+		struct cpcio____istream**it=first;
+		for(;it+1!=last&&it[0]->select==it[1]->select;++it);
+		if(it+1==last)
+		{
+			void**arr=malloc((last-first)*sizeof(void*));
+			if(arr!=NULL)
+			{
+				for(struct cpcio____istream**it=first;it!=last;++it)
+				{
+					arr[last-first]=(*it)->src;
+				}
+				succ=first[0]->select(arr,arr+(last-first),milliseconds);
+				free(arr);
+			}
+		}
+		return succ;
+	}
+}
+
 // Returns true if there are currently more bytes waiting to be read.
 int cpcio_istream_ready(struct cpcio____istream*is)
 {
@@ -265,6 +294,12 @@ int cpcio_istream_ready(struct cpcio____istream*is)
 
 // default ready function, always returns false
 int cpcio_default_ready(void*src)
+{
+	return 0;
+}
+
+// default select function, never ready
+int cpcio_default_select(void**,void**,long)
 {
 	return 0;
 }

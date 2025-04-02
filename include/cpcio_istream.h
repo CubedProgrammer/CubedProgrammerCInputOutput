@@ -20,6 +20,7 @@ struct cpcio____istream
 	size_t(*rd)(void*,void*,size_t);
 	int(*close)(void*);
 	int(*ready)(void*);
+	int(*select)(void**,void**,long);
 	bool eof;
 	bool ubuf;
 	short last;
@@ -46,8 +47,10 @@ long long cpcio_gll_is(struct cpcio____istream*);
 unsigned long long cpcio_gull_is(struct cpcio____istream*);
 float cpcio_gfloat_is(struct cpcio____istream*);
 double cpcio_gdouble_is(struct cpcio____istream*);
+int cpcio_istream_select(struct cpcio____istream**,struct cpcio____istream**,long);
 int cpcio_istream_ready(struct cpcio____istream*);
 int cpcio_default_ready(void*);
+int cpcio_default_select(void**,void**,long);
 void*cpcio_src_is(struct cpcio____istream*);
 typedef struct cpcio____istream*cpcio_istream;
 typedef struct cpcio____istream*istream;
