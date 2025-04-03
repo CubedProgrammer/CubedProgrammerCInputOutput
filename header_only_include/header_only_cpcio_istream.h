@@ -258,7 +258,7 @@ double cpcio_gdouble_is(struct cpcio____istream*is)
 	return d;
 }
 
-int cpcio_istream_select(struct cpcio____istream**first,struct cpcio____istream**last,long milliseconds)
+int cpcio_istream_select(struct cpcio____istream**first,struct cpcio____istream**last,long*milliseconds)
 {
 	if(first==last)
 	{
@@ -271,22 +271,31 @@ int cpcio_istream_select(struct cpcio____istream**first,struct cpcio____istream*
 		for(;it+1!=last&&it[0]->select==it[1]->select;++it);
 		if(it+1==last)
 		{
-			void**arr=malloc((last-first)*sizeof(void*));
-			if(arr!=NULL)
+			succ=0;
+			for(it=first;it!=last;++it)
 			{
-				for(struct cpcio____istream**it=first;it!=last;++it)
+				succ+=it[0]->ubuf&&it[0]->bufi!=it[0]->bufs;
+			}
+			if(succ==0)
+			{
+				--succ;
+				void**arr=malloc((last-first)*sizeof(void*));
+				if(arr!=NULL)
 				{
-					arr[last-it]=(*it)->src;
-				}
-				succ=first[0]->select(arr,arr+(last-first),milliseconds);
-				for(struct cpcio____istream**it=first;it!=last;++it)
-				{
-					if(arr[last-it]==NULL)
+					for(struct cpcio____istream**it=first;it!=last;++it)
 					{
-						*it=NULL;
+						arr[it-first]=(*it)->src;
 					}
+					succ=first[0]->select(arr,arr+(last-first),milliseconds);
+					for(struct cpcio____istream**it=first;it!=last;++it)
+					{
+						if(arr[it-first]==NULL)
+						{
+							*it=NULL;
+						}
+					}
+					free(arr);
 				}
-				free(arr);
 			}
 		}
 		return succ;
@@ -306,7 +315,7 @@ int cpcio_default_ready(void*src)
 }
 
 // default select function, never ready
-int cpcio_default_select(void**,void**,long)
+int cpcio_default_select(void**,void**,long*)
 {
 	return 0;
 }
