@@ -276,9 +276,16 @@ int cpcio_istream_select(struct cpcio____istream**first,struct cpcio____istream*
 			{
 				for(struct cpcio____istream**it=first;it!=last;++it)
 				{
-					arr[last-first]=(*it)->src;
+					arr[last-it]=(*it)->src;
 				}
 				succ=first[0]->select(arr,arr+(last-first),milliseconds);
+				for(struct cpcio____istream**it=first;it!=last;++it)
+				{
+					if(arr[last-it]==NULL)
+					{
+						*it=NULL;
+					}
+				}
 				free(arr);
 			}
 		}
